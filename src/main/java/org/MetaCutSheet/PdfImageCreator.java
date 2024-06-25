@@ -17,7 +17,7 @@ import java.io.IOException;/*NOTE this is a test code written to try to center a
 public class PdfImageCreator {
 
 
-    public static PDDocument PDFRescale(String template,String inputUserFile){
+    public static void PDFRescale(String template,String inputUserFile){
 
         PDDocument final_cs = new PDDocument();
 
@@ -115,11 +115,11 @@ public class PdfImageCreator {
 
             // issue with saving the final_cs from main, these lines are functional but don't belong here
 
+            System.out.println("PDF Created" + "\n");
 
 
             String selectedSaveFilePath = SaveFinalPDF.saveFinalPDF(final_cs);
 
-            System.out.println("Successfully save to : " + selectedSaveFilePath + "\n");
 
             OpenFinalPDF.openPDF(selectedSaveFilePath);
 
@@ -128,8 +128,6 @@ public class PdfImageCreator {
         } catch (IOException e) {
             System.err.println("Error processing PDFs: " + e.getMessage());
         }
-
-        return final_cs;
 
 
     }

@@ -45,9 +45,9 @@ public class SaveFinalPDF {
         //need to change save location and name
         final_cs.save(selectedSaveFilePath);
 
-        //final_cs.save(saveLocation);
-//        final_cs.close();
-        System.out.println("PDF Created" + "\n");
+        System.out.println("Successfully saved to : " + selectedSaveFilePath + "\n");
+
+        final_cs.close();
 
         return selectedSaveFilePath;
 
