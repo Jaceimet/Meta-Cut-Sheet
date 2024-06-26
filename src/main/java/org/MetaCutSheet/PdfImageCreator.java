@@ -11,38 +11,103 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;/*NOTE this is a test code written to try to center a image on a pdf but in a new way*/
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 
 public class PdfImageCreator {
 
 
-    public static void PDFRescale(String template,String inputUserFile){
+    public static PDDocument pdfGenerator(String template, String inputUserFile) {
 
         PDDocument final_cs = new PDDocument();
 
+        String type = null;
 
-        try (PDDocument existingDocument = Loader.loadPDF(new File(template));
-             PDDocument userDocument = Loader.loadPDF(new File(inputUserFile))) {
+
+        //image handling, needs exception handling
+        try {
+            type = Files.probeContentType(Paths.get(inputUserFile));
+
+            if (type.equals("image/png") || type.equals("image/jpeg")) {
+
+                System.out.println("File is an "+ type +" type\n");
+
+                PDImageXObject pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
+
+
+            } else if (type.equals("application/pdf")){
+
+                System.out.println("File is a " + type + " type\n");
+
+            }
+        }catch (IOException e) {
+            System.err.println("Error processing file type: " + e.getMessage());
+        }
+
+        //image handler method
+
+//        if(type.equals())
+//        try(PDDocument existingDocument = Loader.loadPDF(new File(template))){
+//
+//            PDImageXObject pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
+//
+//
+//
+//
+//        } catch (IOException e) {
+//            System.err.println("Error processing PDFs: " + e.getMessage());
+//        }
+
+
+
+        try {
+
+            PDDocument existingDocument = Loader.loadPDF(new File(template));
+            PDDocument userDocument = null;
+
+            if(type.equals("image/png") || type.equals("image/jpeg")){
+
+                PDImageXObject pdImage = PDImageXObject.createFromFile(inputUserFile, final_cs);
+
+                float targetWidth = 592f;//612
+                float aspectRatio = (float) pdImage.getHeight() / pdImage.getWidth();
+                float targetHeight = aspectRatio * targetWidth;
+
+                PDPage temp_page = existingDocument.getPage(0);
+                PDPage page = null;
+
+                final_cs.importPage(temp_page);
+
+
+
+
+
+            } else if (type.equals("application/pdf")){
+
+                userDocument = Loader.loadPDF(new File(inputUserFile));
+
+
+            }
 
             //convert user pdf to image
             PDFRenderer pdfRenderer = new PDFRenderer(userDocument);
             BufferedImage pdfImage = pdfRenderer.renderImage(0, 1);
-//            PDImageXObject.createFromFile(inputUserPDF, doc);
-//            BufferedImage image = pdfRenderer.renderImageWithDPI(0, 300.0F);
-
 
             // Calculate target height for resized image to maintain aspect ratio
             float targetWidth = 592f;//612
             float aspectRatio = (float) pdfImage.getHeight() / pdfImage.getWidth();
             float targetHeight = aspectRatio * targetWidth;
 
+            // page measurements
+            // Width constraint in inches (8.23 inches)
+            // height constraint in inches (8.9in)
+            // float maxHeight = 854.4f;
 
 
-            // Functional but needs refining**********************************************************************
 
             PDPage temp_page = existingDocument.getPage(0);
-//            PDDocument final_cs = new PDDocument();
             PDPage page = null;
 
             int i;
@@ -115,13 +180,13 @@ public class PdfImageCreator {
 
             // issue with saving the final_cs from main, these lines are functional but don't belong here
 
-            System.out.println("PDF Created" + "\n");
-
-
-            String selectedSaveFilePath = SaveFinalPDF.saveFinalPDF(final_cs);
-
-
-            OpenFinalPDF.openPDF(selectedSaveFilePath);
+//            System.out.println("PDF Created" + "\n");
+//
+//
+//            String selectedSaveFilePath = SaveFinalPDF.saveFinalPDF(final_cs);
+//
+//
+//            OpenFinalPDF.openPDF(selectedSaveFilePath);
 
 
 
@@ -129,6 +194,7 @@ public class PdfImageCreator {
             System.err.println("Error processing PDFs: " + e.getMessage());
         }
 
+        return final_cs;
 
     }
 
