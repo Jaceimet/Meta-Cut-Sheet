@@ -30,11 +30,42 @@ public class PdfImageCreator {
         try {
             type = Files.probeContentType(Paths.get(inputUserFile));
 
+
+
             if (type.equals("image/png") || type.equals("image/jpeg")) {
 
                 System.out.println("File is an "+ type +" type\n");
 
+                PDDocument existingDocument = Loader.loadPDF(new File(template));
+
+                PDPage temp_page = existingDocument.getPage(0);
+
                 PDImageXObject pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
+
+                float targetWidth = 592f;
+                float aspectRatio = (float) pdImage2.getHeight() / pdImage2.getWidth();
+                float targetHeight = aspectRatio * targetWidth;
+
+                PDPageContentStream contentStream = new PDPageContentStream(final_cs, temp_page,
+                        PDPageContentStream.AppendMode.APPEND, false);
+
+                boolean isLandscape = pdImage2.getHeight() < pdImage2.getWidth();
+
+
+                if (isLandscape) {
+                    System.out.println("image is in landscape orientation");
+                    contentStream.drawImage(pdImage2, 9.95f, 275f, targetWidth, targetHeight);
+                }else {
+                    System.out.println("image is in portrait orientation");
+                    float imageX = (float) (0.5 * (pdImage2.getWidth() - 648.0 / (double) pdImage2.getHeight() * (double) pdImage2.getWidth()));
+                    float imageY = 144.0F;
+                    float imageWidth = (float) (648.0 / (double) pdImage2.getHeight() * (double) pdImage2.getWidth());
+                    float imageHeight = 638.0F;
+                    contentStream.drawImage(pdImage2, imageX, imageY, imageWidth, imageHeight);
+                }
+
+
+
 
 
             } else if (type.equals("application/pdf")){
@@ -45,21 +76,6 @@ public class PdfImageCreator {
         }catch (IOException e) {
             System.err.println("Error processing file type: " + e.getMessage());
         }
-
-        //image handler method
-
-//        if(type.equals())
-//        try(PDDocument existingDocument = Loader.loadPDF(new File(template))){
-//
-//            PDImageXObject pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
-//
-//
-//
-//
-//        } catch (IOException e) {
-//            System.err.println("Error processing PDFs: " + e.getMessage());
-//        }
-
 
 
         try {
@@ -148,6 +164,8 @@ public class PdfImageCreator {
                     BufferedImage image = pdfRenderer.renderImageWithDPI(i, 300.0F);
                     PDImageXObject pdImage = LosslessFactory.createFromImage(userDocument, image);
 //                    PDImageXObject pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
+
+
 
                     float imageX;
                     float imageY;
