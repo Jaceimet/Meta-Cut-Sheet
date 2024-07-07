@@ -22,6 +22,8 @@ public class Main {
 
         String template = FormSelector.displayForm();
 
+        System.out.println("Template chosen: " + template);
+
         String inputUserFile = InputFileChooser.userFile();
 
 

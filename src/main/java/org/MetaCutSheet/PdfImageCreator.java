@@ -26,11 +26,9 @@ public class PdfImageCreator {
         String type = null;
 
 
-        //image handling, needs exception handling
+        //image handling, needs exception handling -- non-functional
         try {
             type = Files.probeContentType(Paths.get(inputUserFile));
-
-
 
             if (type.equals("image/png") || type.equals("image/jpeg")) {
 
@@ -39,6 +37,8 @@ public class PdfImageCreator {
                 PDDocument existingDocument = Loader.loadPDF(new File(template));
 
                 PDPage temp_page = existingDocument.getPage(0);
+
+                final_cs.addPage(temp_page);
 
                 PDImageXObject pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
 
@@ -64,48 +64,21 @@ public class PdfImageCreator {
                     contentStream.drawImage(pdImage2, imageX, imageY, imageWidth, imageHeight);
                 }
 
-
-
-
-
             } else if (type.equals("application/pdf")){
 
                 System.out.println("File is a " + type + " type\n");
 
             }
         }catch (IOException e) {
-            System.err.println("Error processing file type: " + e.getMessage());
+            System.err.println("Not a supported file type: " + e.getMessage());
         }
 
-
+        //PDF processing  https://www.youtube.com/watch?v=0Enx1YagHqw
         try {
 
             PDDocument existingDocument = Loader.loadPDF(new File(template));
             PDDocument userDocument = null;
 
-            if(type.equals("image/png") || type.equals("image/jpeg")){
-
-                PDImageXObject pdImage = PDImageXObject.createFromFile(inputUserFile, final_cs);
-
-                float targetWidth = 592f;//612
-                float aspectRatio = (float) pdImage.getHeight() / pdImage.getWidth();
-                float targetHeight = aspectRatio * targetWidth;
-
-                PDPage temp_page = existingDocument.getPage(0);
-                PDPage page = null;
-
-                final_cs.importPage(temp_page);
-
-
-
-
-
-            } else if (type.equals("application/pdf")){
-
-                userDocument = Loader.loadPDF(new File(inputUserFile));
-
-
-            }
 
             //convert user pdf to image
             PDFRenderer pdfRenderer = new PDFRenderer(userDocument);
@@ -120,8 +93,6 @@ public class PdfImageCreator {
             // Width constraint in inches (8.23 inches)
             // height constraint in inches (8.9in)
             // float maxHeight = 854.4f;
-
-
 
             PDPage temp_page = existingDocument.getPage(0);
             PDPage page = null;
@@ -139,9 +110,7 @@ public class PdfImageCreator {
             for (i = 0; i < userDocument.getNumberOfPages(); ++i) {
                 //check for orientation
                 PDRectangle pageSize = userDocument.getPage(i).getMediaBox();
-
                 int degree = userDocument.getPage(i).getRotation();
-
                 boolean isLandscape;
 
                 if ((pageSize.getWidth() > pageSize.getHeight()) || (degree == 90) || (degree == 270)) {
@@ -154,17 +123,12 @@ public class PdfImageCreator {
                 // Get page dimensions
                 assert page != null;
                 float pageWidth = page.getMediaBox().getWidth();
-                //System.out.println("Page width: " + pageWidth + "\n");
-//                    float pageHeight = page.getMediaBox().getHeight();
-//                    System.out.println("Page Height: " + pageHeight + "\n");
 
 
                 try (PDPageContentStream contentStream = new PDPageContentStream(userDocument, final_cs.getPage(i),
                         PDPageContentStream.AppendMode.APPEND, false)) {
                     BufferedImage image = pdfRenderer.renderImageWithDPI(i, 300.0F);
                     PDImageXObject pdImage = LosslessFactory.createFromImage(userDocument, image);
-//                    PDImageXObject pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
-
 
 
                     float imageX;
@@ -194,19 +158,6 @@ public class PdfImageCreator {
                 }
 
             }
-
-
-            // issue with saving the final_cs from main, these lines are functional but don't belong here
-
-//            System.out.println("PDF Created" + "\n");
-//
-//
-//            String selectedSaveFilePath = SaveFinalPDF.saveFinalPDF(final_cs);
-//
-//
-//            OpenFinalPDF.openPDF(selectedSaveFilePath);
-
-
 
         } catch (IOException e) {
             System.err.println("Error processing PDFs: " + e.getMessage());
