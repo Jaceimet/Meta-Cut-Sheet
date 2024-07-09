@@ -13,6 +13,19 @@ import java.nio.file.Paths;
 
 
 public class PdfImageCreator {
+    public enum Scaling {
+        /** Print the image at 100% scale. */
+        ACTUAL_SIZE,
+
+        /** Shrink the image to fit the page, if needed. */
+        SHRINK_TO_FIT,
+
+        /** Stretch the image to fill the page, if needed. */
+        STRETCH_TO_FIT,
+
+        /** Stretch or shrink the image to fill the page, as needed. */
+        SCALE_TO_FIT
+    }
 
 
     public static PDDocument pdfGenerator(String template, String inputUserFile) {
@@ -36,8 +49,8 @@ public class PdfImageCreator {
 
                 final_cs.addPage(temp_page);
 
-                PDImageXObject pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
 
+                PDImageXObject pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
 
 
 //                float pageWidth = temp_page.getArtBox().getWidth();
@@ -49,6 +62,7 @@ public class PdfImageCreator {
                 float imageWidth = pdImage2.getWidth();
                 float imageHeight = pdImage2.getHeight();
                 float scale = Math.min(pageWidth / imageWidth, pageHeight / imageHeight);
+                System.out.println("Scale 1: " + scale);
 
                 float scaledWidth = imageWidth * scale;
                 System.out.println(scaledWidth);
@@ -58,7 +72,7 @@ public class PdfImageCreator {
                 float x = (pageWidth - scaledWidth)/2;
                 float y = (pageHeight - scaledHeight)/ 2;
 
-
+                //portrait? long side divided by the short side
                 float aspectRatio = (float) pdImage2.getHeight() / pdImage2.getWidth();
                 float targetWidth = 592f;
                 float targetHeight = aspectRatio * targetWidth;
@@ -82,15 +96,16 @@ public class PdfImageCreator {
                     System.out.println("image is in portrait orientation");
 //                    float imageX = (float) (0.5 * (pdImage2.getWidth() - 648.0 / (double) pdImage2.getHeight() * (double) pdImage2.getWidth()));
 //                    float imageY = 144.0F;
-//                    float imageWidth = (float) (648.0 / (double) pdImage2.getHeight() * (double) pdImage2.getWidth());
-//                    float imageHeight = 638.0F;
-//                    contentStream.drawImage(pdImage2, imageX, imageY, imageWidth, imageHeight);
+//                    float imageWidth2 = (float) (648.0 / (double) pdImage2.getHeight() * (double) pdImage2.getWidth());
+//                    float imageHeight2 = 638.0F;
+//                    contentStream.drawImage(pdImage2, imageX, imageY, imageWidth2, imageHeight2);
 //                    float aspectRatio2 = (float) pdImage2.getHeight() /pdImage2.getWidth();
 //                    float targetHeight2 = aspectRatio2 * targetWidth;
 
-//                    contentStream.drawImage(pdImage2, 9.95f, 121f, targetWidth, targetHeight2);
+                    contentStream.drawImage(pdImage2, 9.95f, 121f, targetWidth, targetHeight);
 //                    contentStream.drawImage(pdImage2, 10f, 125f, targetWidth, 660f);
-                    contentStream.drawImage(pdImage2, x, y, targetWidth, 660f);
+//                    contentStream.drawImage(pdImage2, x, y, targetWidth, 660f);
+
                     contentStream.close();
                     //856.3f
                 }
