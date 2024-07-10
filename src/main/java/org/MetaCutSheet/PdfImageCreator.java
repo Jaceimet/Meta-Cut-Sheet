@@ -53,16 +53,22 @@ public class PdfImageCreator {
                 PDImageXObject pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
 
 
-//                float pageWidth = temp_page.getArtBox().getWidth();
-//                float pageHeight = temp_page.getArtBox().getHeight();
+
+
+                float pageWidth1 = temp_page.getArtBox().getWidth();
+                System.out.println("page width: " + pageWidth1);
+                float pageHeight1 = temp_page.getArtBox().getHeight();
+                System.out.println("page height: " + pageHeight1);
 //                float pageWidth = 790.1f;
 //                float pageHeight = 638.0F;
-                float pageWidth = 638.0F;
-                float pageHeight = 790.1f;
+                float pageWidth = 593F; //638.0F
+                float pageHeight = 644f; //790.1
                 float imageWidth = pdImage2.getWidth();
                 float imageHeight = pdImage2.getHeight();
+
+
                 float scale = Math.min(pageWidth / imageWidth, pageHeight / imageHeight);
-                System.out.println("Scale 1: " + scale);
+                System.out.println("Scale : " + scale);
 
                 float scaledWidth = imageWidth * scale;
                 System.out.println(scaledWidth);
@@ -70,13 +76,16 @@ public class PdfImageCreator {
                 System.out.println(scaledHeight);
 
                 float x = (pageWidth - scaledWidth)/2;
+                System.out.println("x="+x);
                 float y = (pageHeight - scaledHeight)/ 2;
+                System.out.println("y="+y);
 
                 //portrait? long side divided by the short side
                 float aspectRatio = (float) pdImage2.getHeight() / pdImage2.getWidth();
-                float targetWidth = 592f;
+                System.out.println("aspect ratio: " + aspectRatio);
+                float targetWidth = 540f;
                 float targetHeight = aspectRatio * targetWidth;
-
+                //(W.593, H.644 inside the box)
 
                 PDPageContentStream contentStream = new PDPageContentStream(final_cs, temp_page,
                         PDPageContentStream.AppendMode.APPEND, false);
@@ -91,14 +100,18 @@ public class PdfImageCreator {
 //                    float targetHeight2 = aspectRatio2 * targetWidth;
 
                     contentStream.drawImage(pdImage2, 9.95f, 275f, targetWidth, targetHeight);
+
                     contentStream.close();
                 }else {
                     System.out.println("image is in portrait orientation");
+                    //original calc
 //                    float imageX = (float) (0.5 * (pdImage2.getWidth() - 648.0 / (double) pdImage2.getHeight() * (double) pdImage2.getWidth()));
 //                    float imageY = 144.0F;
 //                    float imageWidth2 = (float) (648.0 / (double) pdImage2.getHeight() * (double) pdImage2.getWidth());
 //                    float imageHeight2 = 638.0F;
 //                    contentStream.drawImage(pdImage2, imageX, imageY, imageWidth2, imageHeight2);
+
+
 //                    float aspectRatio2 = (float) pdImage2.getHeight() /pdImage2.getWidth();
 //                    float targetHeight2 = aspectRatio2 * targetWidth;
 
@@ -138,8 +151,8 @@ public class PdfImageCreator {
 //            float targetHeight = aspectRatio * targetWidth;
 //
 //            // page measurements
-//            // Width constraint in inches (8.23 inches)790.1
-//            // height constraint in inches (8.9in)857.3
+//            // Width constraint in inches (8.23 inches)790.1 (743 inside the box)
+//            // height constraint in inches (8.9in)857.3 (639 inside the box)
 //            // float maxHeight = 854.4f;
 //
 //            PDPage temp_page = existingDocument.getPage(0);
