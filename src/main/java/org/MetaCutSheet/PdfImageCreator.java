@@ -66,8 +66,12 @@ public class PdfImageCreator {
                 float imageHeight = pdImage2.getHeight();
                 System.out.println("image height: " + imageHeight);
 
-                float scale = Math.min(imageWidth / pageWidth, imageHeight / pageHeight); //w:2.7026 h:2.95328
-                System.out.println("Scale : " + scale);
+//                float scale = Math.min(imageWidth / pageWidth, imageHeight / pageHeight); //w:2.7026 h:2.95328
+//                System.out.println("Scale : " + scale);
+
+                float scale = ; // target area aspect ratio
+
+
 
                 float scaledWidth = imageWidth * scale;
                 System.out.println(scaledWidth);
@@ -79,14 +83,32 @@ public class PdfImageCreator {
                 float y = (pageHeight - scaledHeight)/ 2;
                 System.out.println("y="+y);
 
+                // box area = 381,892
+                // aspect = 0.7071
+                //w=519.6643
+                //h=735.0553
+
+                //w=1275/1650*381982 =543.2935
+                //h=381982/w =703.0859
+
+
+
+
+            // functional but off center
+//                float aspectRatio = (float) pdImage2.getHeight() / pdImage2.getWidth();
+//                System.out.println("aspect ratio: " + aspectRatio);
+//                float targetWidth = 465f;//540f
+//                float targetHeight = aspectRatio * targetWidth;
+//                //(W.593, H.644 inside the box (Aspect ratio = 1.086003))
+
                 //portrait? long side divided by the short side
                 float aspectRatio = (float) pdImage2.getHeight() / pdImage2.getWidth();
                 System.out.println("aspect ratio: " + aspectRatio);
-                float targetWidth = 540f;//540f
+                float targetWidth = 465f;//540f
                 float targetHeight = aspectRatio * targetWidth;
-                //(W.593, H.644 inside the box (Aspect ratio = 1.086003))
+                //(W.593, H.644 inside the box (Aspect ratio = 1.086003, area )
 
-                float aspectRatioImageHeight = pageWidth / pageHeight * imageWidth;
+                float aspectRatioImageHeight = pageHeight /pageWidth * imageWidth;
                 System.out.println("aspectRatioImageHeight: " + aspectRatioImageHeight);
 
 //               image aspect ratio: 1.4141475
@@ -108,7 +130,7 @@ public class PdfImageCreator {
                     contentStream.close();
                 }else {
                     System.out.println("image is in portrait orientation");
-                    //original calc
+//                    //original calc
 //                    float imageX = (float) (0.5 * (pdImage2.getWidth() - 648.0 / (double) pdImage2.getHeight() * (double) pdImage2.getWidth()));
 //                    float imageY = 144.0F;
 //                    float imageWidth2 = (float) (648.0 / (double) pdImage2.getHeight() * (double) pdImage2.getWidth());
@@ -116,12 +138,22 @@ public class PdfImageCreator {
 //                    contentStream.drawImage(pdImage2, imageX, imageY, imageWidth2, imageHeight2);
 
 
-//                    float aspectRatio2 = (float) pdImage2.getHeight() /pdImage2.getWidth();
-//                    float targetHeight2 = aspectRatio2 * targetWidth;
+                    float aspectRatio2 = (float) pdImage2.getHeight() /pdImage2.getWidth();
+                    float targetHeight2 = aspectRatio2 * targetWidth;
 
-                    contentStream.drawImage(pdImage2, 9.95f, 125f, targetWidth, targetHeight);
+//                    contentStream.drawImage(pdImage2, 9.95f, 125f, targetWidth, targetHeight);
+//                    contentStream.drawImage(pdImage2, 9.95f, 139f, targetWidth, targetHeight);
+//                    contentStream.drawImage(pdImage2, 9.95f, 139f, targetWidth, targetHeight2);
 //                    contentStream.drawImage(pdImage2, 10f, 125f, targetWidth, 660f);
 //                    contentStream.drawImage(pdImage2, x, y, targetWidth, 660f);
+//                    contentStream.drawImage(pdImage2, 9.95f, 139f, 543f, 703f);
+//                    contentStream.drawImage(pdImage2, 9.95f, 139f, 593.0674f, 643.9268f);
+                    contentStream.drawImage(pdImage2, 9.95f, 139f, 543.2935f, 703.0859f);
+                    //w=1275/1650*381982 =543.2935
+                    //h=381982/w =703.0859
+                    //w=593.0674
+                    //h=643.9268
+
 
                     contentStream.close();
                     //856.3f

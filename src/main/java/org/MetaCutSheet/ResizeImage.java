@@ -5,38 +5,55 @@ import java.awt.*;
 public class ResizeImage {
 
     //(W.593, H.644 inside the box (Aspect ratio = 1.086003))
+    //0.7071398 * 484,704
+
+    //w=585.4515
+    //h=827.9148
+
 
     //image aspect ratio: 1.4141475
     Dimension imgSize = new Dimension(500, 100);
     Dimension boundary = new Dimension(593, 644);
 
 //    W.593, H.644 inside the box
+public double getScaleFactor(int iMasterSize, int iTargetSize) {
 
-    public static Dimension getScaledDimension(Dimension imgSize, Dimension boundary) {
+    double dScale = 1;
+    if (iMasterSize > iTargetSize) {
 
-        int original_width = imgSize.width;
-        int original_height = imgSize.height;
-        int bound_width = boundary.width;
-        int bound_height = boundary.height;
-        int new_width = original_width;
-        int new_height = original_height;
+        dScale = (double) iTargetSize / (double) iMasterSize;
 
-        // first check if we need to scale width
-        if (original_width > bound_width) {
-            //scale width to fit
-            new_width = bound_width;
-            //scale height to maintain aspect ratio
-            new_height = (new_width * original_height) / original_width;
-        }
+    } else {
 
-        // then check if we need to scale even with the new height
-        if (new_height > bound_height) {
-            //scale height to fit instead
-            new_height = bound_height;
-            //scale width to maintain aspect ratio
-            new_width = (new_height * original_width) / original_height;
-        }
+        dScale = (double) iTargetSize / (double) iMasterSize;
 
-        return new Dimension(new_width, new_height);
     }
+
+    return dScale;
+
+}
+
+    public double getScaleFactorToFit(Dimension original, Dimension toFit) {
+
+        double dScale = 1d;
+
+        if (original != null && toFit != null) {
+
+            double dScaleWidth = getScaleFactor(original.width, toFit.width);
+            double dScaleHeight = getScaleFactor(original.height, toFit.height);
+
+            dScale = Math.min(dScaleHeight, dScaleWidth);
+
+        }
+
+        return dScale;
+
+    }
+//
+//    double factor getScaledFactorToFit(new Dimension(image.getWidth(), image.getHeight()), getSize());
+//
+//    int scaledWidth = image.getWidth() * scale;
+//    int scaledHeight *= image.getWidth() * scale;
+
+
 }
