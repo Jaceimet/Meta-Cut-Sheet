@@ -50,7 +50,6 @@ public class PdfImageCreator {
 
                 final_cs.addPage(temp_page);
 
-
                 PDImageXObject pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
 
                 //find template measurements
@@ -60,9 +59,9 @@ public class PdfImageCreator {
                 float exPageHeight = pageSize.getHeight();
                 System.out.println("exPageHeight "+exPageHeight);
 
-                //print box dimensions
+                //view box dimensions
                 float pageWidth = 593F; //638.0F
-                float pageHeight = 644f; //790.1
+                float pageHeight = 642f; //644f, 641.48f, 638.6f
 
                 //image dimensions
                 float imageWidth = pdImage2.getWidth();
@@ -78,7 +77,7 @@ public class PdfImageCreator {
                 //scale?
 //                float scale = Math.min(imageWidth / pageWidth, imageHeight / pageHeight); //w:2.7026 h:2.95328
 //                System.out.println("Scale : " + scale);
-                float scale = Math.min(pageWidth / imageWidth, pageHeight/ imageHeight); //w:2.7026 h:2.95328
+                float scale = Math.min(pageWidth / imageWidth, pageHeight/ imageHeight);
                 System.out.println("Scale : " + scale);
 
                 float scaledWidth3 = imageWidth * scale;
@@ -94,8 +93,8 @@ public class PdfImageCreator {
 
                 float x = (pageWidth - scaledWidth3)/2 + 9.95f;
                 System.out.println("x= "+x);
-//                float y = (pageHeight - scaledHeight)/ 2;
-//                System.out.println("y="+y);
+                float y = (pageHeight - scaledHeight3)/ 2 + 139f;
+                System.out.println("y= "+y);
 
                 // box area = 381,892
                 // aspect = 0.7071
@@ -143,7 +142,10 @@ public class PdfImageCreator {
 //                    float aspectRatio2 = (float) pdImage2.getWidth() / pdImage2.getHeight();
 //                    float targetHeight2 = aspectRatio2 * targetWidth;
 
-                    contentStream.drawImage(pdImage2, 9.95f, 275f, targetWidth, targetHeight);
+                    // functional but hard coded, not centered, not full width
+//                    contentStream.drawImage(pdImage2, 9.95f, 275f, targetWidth, targetHeight);
+
+                    contentStream.drawImage(pdImage2, 9.95f, y, scaledWidth3, scaledHeight3);
 
                     contentStream.close();
                 }else {
