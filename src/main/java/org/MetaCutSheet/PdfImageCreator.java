@@ -60,8 +60,8 @@ public class PdfImageCreator {
                 System.out.println("exPageHeight "+exPageHeight);
 
                 //view box dimensions
-                float pageWidth = 593F; //638.0F
-                float pageHeight = 642f; //644f, 641.48f, 638.6f
+                float mediaBoxWidth = 593F; //638.0F
+                float mediaBoxHeight = 642f; //644f, 641.48f, 638.6f
 
                 //image dimensions
                 float imageWidth = pdImage2.getWidth();
@@ -69,42 +69,37 @@ public class PdfImageCreator {
                 float imageHeight = pdImage2.getHeight();
                 System.out.println("image height: " + imageHeight);
 
-                float scaledWidth = imageWidth / pageWidth ;
+                //scaled image dimensions
+                float scaledWidth = imageWidth / mediaBoxWidth ;
                 System.out.println("scaledWidth "+scaledWidth);
-                float scaledHeight = imageHeight / pageHeight;
+                float scaledHeight = imageHeight / mediaBoxHeight;
                 System.out.println("scaledHeight "+scaledHeight);
 
-                //scale?
-//                float scale = Math.min(imageWidth / pageWidth, imageHeight / pageHeight); //w:2.7026 h:2.95328
-//                System.out.println("Scale : " + scale);
-                float scale = Math.min(pageWidth / imageWidth, pageHeight/ imageHeight);
+                //scale image to view box
+                float scale = Math.min(mediaBoxWidth / imageWidth, mediaBoxHeight/ imageHeight);
                 System.out.println("Scale : " + scale);
 
+                // functional scaling
                 float scaledWidth3 = imageWidth * scale;
                 System.out.println("scaledWidth3 "+scaledWidth3);
                 float scaledHeight3 = imageHeight * scale;
                 System.out.println("scaledHeight3 "+scaledHeight3);
 
-                // fit to view box
+                //  portrait stretch to view box (optional)
                 float scaledWidth2 = imageWidth / scaledWidth;
                 System.out.println("scaledWidth2 "+scaledWidth2);
                 float scaledHeight2 = imageHeight / scaledHeight;
                 System.out.println("scaledHeight2 "+scaledHeight2);
 
-                float x = (pageWidth - scaledWidth3)/2 + 9.95f;
+                // dynamically adjust x,y to input
+                float x = (mediaBoxWidth - scaledWidth3)/2 + 9.95f;
                 System.out.println("x= "+x);
-                float y = (pageHeight - scaledHeight3)/ 2 + 139f;
+                float y = (mediaBoxHeight - scaledHeight3)/ 2 + 139f;
                 System.out.println("y= "+y);
 
+                //(W.593, H.644 inside the box (Aspect ratio = 1.086003))
                 // box area = 381,892
-                // aspect = 0.7071
-                //w=519.6643
-                //h=735.0553
-
-                //w=1275/1650*381982 =543.2935
-                //h=381982/w =703.0859
-
-
+                // aspect = 0.7071 (portrait? long side divided by the short side)
 
 
             // functional but off center
@@ -116,7 +111,7 @@ public class PdfImageCreator {
 
                 //portrait? long side divided by the short side
 
-            // functional fit to view box
+            // functional stretch to view box
                 float aspectRatio = (float) pdImage2.getHeight() / pdImage2.getWidth();
                 System.out.println("aspect ratio: " + aspectRatio);
                 float targetWidth = 455f;//540f, 465f
@@ -126,7 +121,7 @@ public class PdfImageCreator {
 //               image aspect ratio: 1.4141475
 //               view box area = 381,892
 
-                float aspectRatioImageHeight = pageHeight /pageWidth * imageWidth;
+                float aspectRatioImageHeight = mediaBoxHeight /mediaBoxWidth * imageWidth;
                 System.out.println("aspectRatioImageHeight: " + aspectRatioImageHeight);
 
 
@@ -138,12 +133,6 @@ public class PdfImageCreator {
 
                 if (isLandscape) {
                     System.out.println("image is in landscape orientation");
-                    //possible landscape
-//                    float aspectRatio2 = (float) pdImage2.getWidth() / pdImage2.getHeight();
-//                    float targetHeight2 = aspectRatio2 * targetWidth;
-
-                    // functional but hard coded, not centered, not full width
-//                    contentStream.drawImage(pdImage2, 9.95f, 275f, targetWidth, targetHeight);
 
                     contentStream.drawImage(pdImage2, 9.95f, y, scaledWidth3, scaledHeight3);
 
@@ -151,15 +140,10 @@ public class PdfImageCreator {
                 }else {
                     System.out.println("image is in portrait orientation");
 
-                    //prototypes
-//                    contentStream.drawImage(pdImage2, 9.95f, 139f, targetWidth, targetHeight);
-//                    contentStream.drawImage(pdImage2, 10f, 125f, targetWidth, 660f);
-
-                    // functional but fit to view box
+                    // functional but stretch to view box
 //                    contentStream.drawImage(pdImage2, 9.95f, 139f, scaledWidth2, scaledHeight2);
-                    // functional but not centered
-//                    contentStream.drawImage(pdImage2, 9.95f, 139f, scaledWidth3, scaledHeight3);
-                    //portrait centered
+
+                    // perfect portrait centered
                     contentStream.drawImage(pdImage2, x, 139f, scaledWidth3, scaledHeight3);
 
                     contentStream.close();
