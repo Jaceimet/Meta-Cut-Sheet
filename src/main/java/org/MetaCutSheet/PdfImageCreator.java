@@ -21,45 +21,62 @@ public class PdfImageCreator {
     public static PDDocument pdfGenerator(String template, String inputUserFile) {
 
         PDDocument final_cs = new PDDocument();
-        String type;
+        String type = null;
+        PDPage temp_page = null;
+        PDDocument existingDocument = null;
 
-        //image handling, needs exception handling -- semi-functional but image is warped
+        //media box dimensions
+        float mediaBoxWidth = 593F; //638.0F
+        float mediaBoxHeight = 642f; //644f, 641.48f, 638.6f
+        float mediaBoxBottomLeftX = 9.95f;
+        float mediaBoxBottomLeftY = 139f;
+
+        // Load template
         try {
-            type = Files.probeContentType(Paths.get(inputUserFile));
+            existingDocument = Loader.loadPDF(new File(template));
+            temp_page = existingDocument.getPage(0);
 
-            if (type.equals("image/png") || type.equals("image/jpeg")) {
+            //find template measurements
+            PDRectangle pageSize = existingDocument.getPage(0).getMediaBox();
+            float existingPageWidth = pageSize.getWidth();
+            System.out.println("existingPageWidth "+existingPageWidth+ "\n");
+            float existingPageHeight = pageSize.getHeight();
+            System.out.println("existingPageHeight "+existingPageHeight+ "\n");
+
+            //(W.593, H.644 inside the box (Aspect ratio = 1.086003))
+            // box area = 381,892
+            // aspect = 0.7071 (portrait? long side divided by the short side)
+            // portrait aspect ratio = long side divided by the short side
+        }catch (IOException e) {
+        System.err.println("Error processing template: " + e.getMessage());
+        }
+
+        try{
+            type = Files.probeContentType(Paths.get(inputUserFile));
+        }catch (IOException e) {
+            System.err.println("Error processing inputUserFile type: " + e.getMessage());
+        }
+
+
+
+        try {
+
+            //image handling, needs refining
+
+            if (type != null && type.equals("image/png") || type.equals("image/jpeg")) {
 
                 System.out.println("File is an "+ type +" type\n");
-
-                PDDocument existingDocument = Loader.loadPDF(new File(template));
-
-                PDPage temp_page = existingDocument.getPage(0);
 
                 final_cs.addPage(temp_page);
 
                 PDImageXObject pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
-
-                //find template measurements
-                PDRectangle pageSize = existingDocument.getPage(0).getMediaBox();
-                float exPageWidth = pageSize.getWidth();
-                System.out.println("exPageWidth "+exPageWidth+ "\n");
-                float exPageHeight = pageSize.getHeight();
-                System.out.println("exPageHeight "+exPageHeight+ "\n");
-
-                //(W.593, H.644 inside the box (Aspect ratio = 1.086003))
-                // box area = 381,892
-                // aspect = 0.7071 (portrait? long side divided by the short side)
-                // portrait aspect ratio = long side divided by the short side
-
-                //media box dimensions
-                float mediaBoxWidth = 593F; //638.0F
-                float mediaBoxHeight = 642f; //644f, 641.48f, 638.6f
 
                 //image dimensions
                 float imageWidth = pdImage2.getWidth();
                 System.out.println("image width: " + imageWidth+ "\n");
                 float imageHeight = pdImage2.getHeight();
                 System.out.println("image height: " + imageHeight+ "\n");
+                
 
                 //scale fit image to media box
                 float scale = Math.min(mediaBoxWidth / imageWidth, mediaBoxHeight/ imageHeight);
@@ -70,12 +87,12 @@ public class PdfImageCreator {
                 System.out.println("scaledHeight "+scaledHeight+ "\n");
 
                 // dynamically adjust x,y to input
-                float x = (mediaBoxWidth - scaledWidth)/2 + 9.95f;
+                float x = (mediaBoxWidth - scaledWidth)/2 + mediaBoxBottomLeftX;
                 System.out.println("x= "+ x + "\n");
-                float y = (mediaBoxHeight - scaledHeight)/ 2 + 139f;
+                float y = (mediaBoxHeight - scaledHeight)/ 2 + mediaBoxBottomLeftY;
                 System.out.println("y= "+ y + "\n");
 
-                // non funcational scale stretch to media box (optional calculation)
+                // non-functional scale stretch to media box (optional calculation)
 //                float scaledWidth2 = imageWidth / scaledWidth;
 //                System.out.println("scaledWidth2 "+scaledWidth2);
 //                float scaledHeight2 = imageHeight / scaledHeight;
@@ -91,7 +108,7 @@ public class PdfImageCreator {
                 if (isLandscape) {
                     System.out.println("image is in landscape orientation" + "\n");
 
-                    contentStream.drawImage(pdImage2, 9.95f, y, scaledWidth, scaledHeight);
+                    contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, y, scaledWidth, scaledHeight);
 
                     contentStream.close();
                 }else {
@@ -101,7 +118,7 @@ public class PdfImageCreator {
 //                    contentStream.drawImage(pdImage2, 9.95f, 139f, scaledWidth2, scaledHeight2);
 
                     // perfect portrait centered
-                    contentStream.drawImage(pdImage2, x, 139f, scaledWidth, scaledHeight);
+                    contentStream.drawImage(pdImage2, x, mediaBoxBottomLeftY, scaledWidth, scaledHeight);
 
                     contentStream.close();
 
@@ -112,28 +129,18 @@ public class PdfImageCreator {
 
                 System.out.println("File is a " + type + " type\n");
 
-//                PDF processing  https://www.youtube.com/watch?v=0Enx1YagHqw
+
         try {
 
-            PDDocument existingDocument = Loader.loadPDF(new File(template));
+//          PDF processing  https://www.youtube.com/watch?v=0Enx1YagHqw
+            PDPage page = null;
+
             PDDocument userDocument = Loader.loadPDF(new File(inputUserFile));
 
             //convert user pdf to image
             PDFRenderer pdfRenderer = new PDFRenderer(userDocument);
             BufferedImage pdfImage = pdfRenderer.renderImage(0, 1);
 
-            // Calculate target height for resized image to maintain aspect ratio
-            float targetWidth = 592f;//612
-            float aspectRatio = (float) pdfImage.getHeight() / pdfImage.getWidth();
-            float targetHeight = aspectRatio * targetWidth;
-
-            // page measurements
-            // Width constraint in inches (8.23 inches)790.1 (743 inside the box)
-            // height constraint in inches (8.9in)857.3 (639 inside the box)
-            // float maxHeight = 854.4f;
-
-            PDPage temp_page = existingDocument.getPage(0);
-            PDPage page = null;
 
             int i;
             for (i = 0; i < userDocument.getNumberOfPages(); ++i) {
@@ -149,8 +156,8 @@ public class PdfImageCreator {
                 //check for orientation
                 PDRectangle pageSize = userDocument.getPage(i).getMediaBox();
                 int degree = userDocument.getPage(i).getRotation();
-                boolean isLandscape;
 
+                boolean isLandscape;
                 isLandscape = (pageSize.getWidth() > pageSize.getHeight()) || (degree == 90) || (degree == 270);
 
 
@@ -170,6 +177,10 @@ public class PdfImageCreator {
                     float imageWidth;
                     float imageHeight;
 
+                    // Calculate target height for resized image to maintain aspect ratio
+                    float targetWidth = 592f;//612
+                    float aspectRatio = (float) pdfImage.getHeight() / pdfImage.getWidth();
+                    float targetHeight = aspectRatio * targetWidth;
 
                     if (isLandscape) {
 
@@ -205,6 +216,7 @@ public class PdfImageCreator {
         }catch (IOException e) {
             System.err.println("Not a supported file type: " + e.getMessage());
         }
+
 
         //PDF processing  https://www.youtube.com/watch?v=0Enx1YagHqw
 //        try {
@@ -299,5 +311,7 @@ public class PdfImageCreator {
         return final_cs;
 
     }
+
+
 
 }
