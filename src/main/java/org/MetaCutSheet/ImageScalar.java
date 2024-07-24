@@ -22,7 +22,7 @@ public class ImageScalar {
         this.imageWidth = pdImage.getWidth();
         this.imageHeight = pdImage.getHeight();
     }
-    
+
     float scale = Math.min(mediaBoxWidth / imageWidth, mediaBoxHeight / imageHeight);
 
     public float getScaledWidth() {
