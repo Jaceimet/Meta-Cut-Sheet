@@ -23,7 +23,8 @@ public class PdfImageCreator {
         PDDocument final_cs = new PDDocument();
         String type = null;
         PDPage temp_page = null;
-        PDDocument existingDocument = null;
+        PDDocument existingDocument;
+        PDImageXObject pdImage2;
 
         //media box dimensions
         float mediaBoxWidth = 593F; //638.0F
@@ -57,8 +58,6 @@ public class PdfImageCreator {
             System.err.println("Error processing inputUserFile type: " + e.getMessage());
         }
 
-
-
         try {
 
             //image handling, needs refining
@@ -69,31 +68,47 @@ public class PdfImageCreator {
 
                 final_cs.addPage(temp_page);
 
-                PDImageXObject pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
+                pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
 
                 // needs to be a separate class?
 
                 ///////////////////////////////////
-                //image dimensions
-                float imageWidth = pdImage2.getWidth();
-                System.out.println("image width: " + imageWidth+ "\n");
-                float imageHeight = pdImage2.getHeight();
-                System.out.println("image height: " + imageHeight+ "\n");
+//                //image dimensions
+//                float imageWidth = pdImage2.getWidth();
+//                System.out.println("image width: " + imageWidth+ "\n");
+//                float imageHeight = pdImage2.getHeight();
+//                System.out.println("image height: " + imageHeight+ "\n");
+//
+//                //scale fit image to media box
+//                float scale = Math.min(mediaBoxWidth / imageWidth, mediaBoxHeight/ imageHeight);
+//                System.out.println("Scale : " + scale + "\n");
+//                float scaledWidth = imageWidth * scale;
+//                System.out.println("scaledWidth "+scaledWidth+ "\n");
+//                float scaledHeight = imageHeight * scale;
+//                System.out.println("scaledHeight "+scaledHeight+ "\n");
+//
+//                // dynamically adjust x,y to input
+//                float adjustedX = (mediaBoxWidth - scaledWidth)/2 + mediaBoxBottomLeftX;
+//                System.out.println("x= "+ adjustedX + "\n");
+//                float adjustedY = (mediaBoxHeight - scaledHeight)/ 2 + mediaBoxBottomLeftY;
+//                System.out.println("y= "+ adjustedY + "\n");
 
-                //scale fit image to media box
-                float scale = Math.min(mediaBoxWidth / imageWidth, mediaBoxHeight/ imageHeight);
-                System.out.println("Scale : " + scale + "\n");
-                float scaledWidth = imageWidth * scale;
-                System.out.println("scaledWidth "+scaledWidth+ "\n");
-                float scaledHeight = imageHeight * scale;
-                System.out.println("scaledHeight "+scaledHeight+ "\n");
-
-                // dynamically adjust x,y to input
-                float x = (mediaBoxWidth - scaledWidth)/2 + mediaBoxBottomLeftX;
-                System.out.println("x= "+ x + "\n");
-                float y = (mediaBoxHeight - scaledHeight)/ 2 + mediaBoxBottomLeftY;
-                System.out.println("y= "+ y + "\n");
                 ////////////////////////////////////////////////////////
+
+                //non-functional call to imagescalar (Exception in thread "main" java.lang.IllegalArgumentException: NaN is not a finite number)
+                ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+                        mediaBoxBottomLeftY, pdImage2);
+                float scaledWidth = imageScalar.getScaledWidth();
+                System.out.println(scaledWidth);
+                float scaledHeight = imageScalar.getScaledHeight();
+                System.out.println(scaledHeight);
+                float adjustedX = imageScalar.getAdjustedX();
+                System.out.println(adjustedX);
+                float adjustedY = imageScalar.getAdjustedY();
+                System.out.println(adjustedY);
+                ////////////////////////////////////////////////////////
+
+
 
                 // non-functional scale stretch to media box (optional calculation)
 //                float scaledWidth2 = imageWidth / scaledWidth;
@@ -111,7 +126,7 @@ public class PdfImageCreator {
                 if (isLandscape) {
                     System.out.println("image is in landscape orientation" + "\n");
 
-                    contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, y, scaledWidth, scaledHeight);
+                    contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, adjustedY, scaledWidth, scaledHeight);
 
                     contentStream.close();
                 }else {
@@ -121,7 +136,7 @@ public class PdfImageCreator {
 //                    contentStream.drawImage(pdImage2, 9.95f, 139f, scaledWidth2, scaledHeight2);
 
                     // perfect portrait centered
-                    contentStream.drawImage(pdImage2, x, mediaBoxBottomLeftY, scaledWidth, scaledHeight);
+                    contentStream.drawImage(pdImage2, adjustedX, mediaBoxBottomLeftY, scaledWidth, scaledHeight);
 
                     contentStream.close();
 
@@ -135,20 +150,17 @@ public class PdfImageCreator {
 
         try {
 
-//          PDF processing  https://www.youtube.com/watch?v=0Enx1YagHqw
-            PDPage page = null;
+         //PDF processing
 
+            // Load user file
             PDDocument userDocument = Loader.loadPDF(new File(inputUserFile));
-
             //convert user pdf to image
             PDFRenderer pdfRenderer = new PDFRenderer(userDocument);
-//            BufferedImage pdfImage = pdfRenderer.renderImage(0, 1);
 
 
             int i;
             for (i = 0; i < userDocument.getNumberOfPages(); ++i) {
                 final_cs.importPage(temp_page);
-                page = userDocument.getPage(i);
 
             }
 
@@ -159,33 +171,14 @@ public class PdfImageCreator {
                 //check for orientation
                 PDRectangle pageSize = userDocument.getPage(i).getMediaBox();
                 int degree = userDocument.getPage(i).getRotation();
-
                 boolean isLandscape;
                 isLandscape = (pageSize.getWidth() > pageSize.getHeight()) || (degree == 90) || (degree == 270);
-
-
-                // Get page dimensions
-
-
-//                assert page != null;
-//                float pageWidth = page.getMediaBox().getWidth();
 
 
                 try (PDPageContentStream contentStream = new PDPageContentStream(userDocument, final_cs.getPage(i),
                         PDPageContentStream.AppendMode.APPEND, false)) {
                     BufferedImage image = pdfRenderer.renderImageWithDPI(i, 300.0F);
                     PDImageXObject pdImage = LosslessFactory.createFromImage(userDocument, image);
-
-
-//                    float imageX;
-//                    float imageY;
-//                    float imageWidth;
-//                    float imageHeight;
-//
-//                    // Calculate target height for resized image to maintain aspect ratio
-//                    float targetWidth = 592f;//612
-//                    float aspectRatio = (float) pdfImage.getHeight() / pdfImage.getWidth();
-//                    float targetHeight = aspectRatio * targetWidth;
 
                     /////// new calc
                     //image dimensions
@@ -208,26 +201,17 @@ public class PdfImageCreator {
                     float y = (mediaBoxHeight - scaledHeight)/ 2 + mediaBoxBottomLeftY;
                     System.out.println("y= "+ y + "\n");
                     //////////////////////
+
                     if (isLandscape) {
 
                         System.out.println("Landscape" + "\n");
-                        //old calc
-//                        contentStream.drawImage(pdImage, 9.95f, 275f, targetWidth, targetHeight);
-                        //new calc
+
                         contentStream.drawImage(pdImage, mediaBoxBottomLeftX, y, scaledWidth, scaledHeight);
 
                     } else {
-                        // For portrait mode, keep the existing coordinates and dimensions
+
                         System.out.println("Protrait" + "\n");
 
-                        //old calc
-//                        imageX = (float) (0.5 * (pageWidth - 648.0 / (double) pdImage.getHeight() * (double) pdImage.getWidth()));
-//                        imageY = 139.0F;//144.0F
-//                        imageWidth = (float) (648.0 / (double) pdImage.getHeight() * (double) pdImage.getWidth());
-//                        imageHeight = 638.0F;
-//                        contentStream.drawImage(pdImage, imageX, imageY, imageWidth, imageHeight);
-
-                        //new calc
                         contentStream.drawImage(pdImage, x, mediaBoxBottomLeftY, scaledWidth, scaledHeight);
 
                     }
@@ -243,107 +227,12 @@ public class PdfImageCreator {
 
             }
 
-
-
         }catch (IOException e) {
             System.err.println("Not a supported file type: " + e.getMessage());
         }
 
-
-        //PDF processing  https://www.youtube.com/watch?v=0Enx1YagHqw
-//        try {
-//
-//            PDDocument existingDocument = Loader.loadPDF(new File(template));
-//            PDDocument userDocument = null;
-//
-//
-//            //convert user pdf to image
-//            PDFRenderer pdfRenderer = new PDFRenderer(userDocument);
-//            BufferedImage pdfImage = pdfRenderer.renderImage(0, 1);
-//
-//            // Calculate target height for resized image to maintain aspect ratio
-//            float targetWidth = 592f;//612
-//            float aspectRatio = (float) pdfImage.getHeight() / pdfImage.getWidth();
-//            float targetHeight = aspectRatio * targetWidth;
-//
-//            // page measurements
-//            // Width constraint in inches (8.23 inches)790.1 (743 inside the box)
-//            // height constraint in inches (8.9in)857.3 (639 inside the box)
-//            // float maxHeight = 854.4f;
-//
-//            PDPage temp_page = existingDocument.getPage(0);
-//            PDPage page = null;
-//
-//            int i;
-//            for (i = 0; i < userDocument.getNumberOfPages(); ++i) {
-//                final_cs.importPage(temp_page);
-//                page = userDocument.getPage(i);
-//
-//            }
-//
-//            System.out.println("final_Cs has " + i + " pages" + "\n");
-//
-//
-//            for (i = 0; i < userDocument.getNumberOfPages(); ++i) {
-//                //check for orientation
-//                PDRectangle pageSize = userDocument.getPage(i).getMediaBox();
-//                int degree = userDocument.getPage(i).getRotation();
-//                boolean isLandscape;
-//
-//                if ((pageSize.getWidth() > pageSize.getHeight()) || (degree == 90) || (degree == 270)) {
-//                    isLandscape = true;
-//                } else {
-//                    isLandscape = false;
-//                }
-//
-//
-//                // Get page dimensions
-//                assert page != null;
-//                float pageWidth = page.getMediaBox().getWidth();
-//
-//
-//                try (PDPageContentStream contentStream = new PDPageContentStream(userDocument, final_cs.getPage(i),
-//                        PDPageContentStream.AppendMode.APPEND, false)) {
-//                    BufferedImage image = pdfRenderer.renderImageWithDPI(i, 300.0F);
-//                    PDImageXObject pdImage = LosslessFactory.createFromImage(userDocument, image);
-//
-//
-//                    float imageX;
-//                    float imageY;
-//                    float imageWidth;
-//                    float imageHeight;
-//
-//
-//                    if (isLandscape) {
-//
-//                        System.out.println("Landscape" + "\n");
-//
-//                        contentStream.drawImage(pdImage, 9.95f, 275f, targetWidth, targetHeight);
-//
-//                    } else {
-//                        // For portrait mode, keep the existing coordinates and dimensions
-//                        System.out.println("Protrait" + "\n");
-//
-//                        imageX = (float) (0.5 * (pageWidth - 648.0 / (double) pdImage.getHeight() * (double) pdImage.getWidth()));
-//                        imageY = 144.0F;
-//                        imageWidth = (float) (648.0 / (double) pdImage.getHeight() * (double) pdImage.getWidth());
-//                        imageHeight = 638.0F;
-//                        contentStream.drawImage(pdImage, imageX, imageY, imageWidth, imageHeight);
-//
-//                    }
-//
-//                }
-//
-//            }
-//
-//        } catch (IOException e) {
-//            System.err.println("Error processing PDFs: " + e.getMessage());
-//        }
-
         return final_cs;
 
     }
-
-
 
 }
