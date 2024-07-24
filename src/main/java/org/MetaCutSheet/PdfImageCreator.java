@@ -71,12 +71,14 @@ public class PdfImageCreator {
 
                 PDImageXObject pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
 
+                // needs to be a separate class?
+
+                ///////////////////////////////////
                 //image dimensions
                 float imageWidth = pdImage2.getWidth();
                 System.out.println("image width: " + imageWidth+ "\n");
                 float imageHeight = pdImage2.getHeight();
                 System.out.println("image height: " + imageHeight+ "\n");
-                
 
                 //scale fit image to media box
                 float scale = Math.min(mediaBoxWidth / imageWidth, mediaBoxHeight/ imageHeight);
@@ -91,6 +93,7 @@ public class PdfImageCreator {
                 System.out.println("x= "+ x + "\n");
                 float y = (mediaBoxHeight - scaledHeight)/ 2 + mediaBoxBottomLeftY;
                 System.out.println("y= "+ y + "\n");
+                ////////////////////////////////////////////////////////
 
                 // non-functional scale stretch to media box (optional calculation)
 //                float scaledWidth2 = imageWidth / scaledWidth;
@@ -139,7 +142,7 @@ public class PdfImageCreator {
 
             //convert user pdf to image
             PDFRenderer pdfRenderer = new PDFRenderer(userDocument);
-            BufferedImage pdfImage = pdfRenderer.renderImage(0, 1);
+//            BufferedImage pdfImage = pdfRenderer.renderImage(0, 1);
 
 
             int i;
@@ -162,8 +165,10 @@ public class PdfImageCreator {
 
 
                 // Get page dimensions
-                assert page != null;
-                float pageWidth = page.getMediaBox().getWidth();
+
+
+//                assert page != null;
+//                float pageWidth = page.getMediaBox().getWidth();
 
 
                 try (PDPageContentStream contentStream = new PDPageContentStream(userDocument, final_cs.getPage(i),
@@ -172,31 +177,58 @@ public class PdfImageCreator {
                     PDImageXObject pdImage = LosslessFactory.createFromImage(userDocument, image);
 
 
-                    float imageX;
-                    float imageY;
-                    float imageWidth;
-                    float imageHeight;
+//                    float imageX;
+//                    float imageY;
+//                    float imageWidth;
+//                    float imageHeight;
+//
+//                    // Calculate target height for resized image to maintain aspect ratio
+//                    float targetWidth = 592f;//612
+//                    float aspectRatio = (float) pdfImage.getHeight() / pdfImage.getWidth();
+//                    float targetHeight = aspectRatio * targetWidth;
 
-                    // Calculate target height for resized image to maintain aspect ratio
-                    float targetWidth = 592f;//612
-                    float aspectRatio = (float) pdfImage.getHeight() / pdfImage.getWidth();
-                    float targetHeight = aspectRatio * targetWidth;
+                    /////// new calc
+                    //image dimensions
+                    float imageWidth = pdImage.getWidth();
+                    System.out.println("image width: " + imageWidth+ "\n");
+                    float imageHeight = pdImage.getHeight();
+                    System.out.println("image height: " + imageHeight+ "\n");
 
+                    //scale fit image to media box
+                    float scale = Math.min(mediaBoxWidth / imageWidth, mediaBoxHeight/ imageHeight);
+                    System.out.println("Scale : " + scale + "\n");
+                    float scaledWidth = imageWidth * scale;
+                    System.out.println("scaledWidth "+scaledWidth+ "\n");
+                    float scaledHeight = imageHeight * scale;
+                    System.out.println("scaledHeight "+scaledHeight+ "\n");
+
+                    // dynamically adjust x,y to input
+                    float x = (mediaBoxWidth - scaledWidth)/2 + mediaBoxBottomLeftX;
+                    System.out.println("x= "+ x + "\n");
+                    float y = (mediaBoxHeight - scaledHeight)/ 2 + mediaBoxBottomLeftY;
+                    System.out.println("y= "+ y + "\n");
+                    //////////////////////
                     if (isLandscape) {
 
                         System.out.println("Landscape" + "\n");
-
-                        contentStream.drawImage(pdImage, 9.95f, 275f, targetWidth, targetHeight);
+                        //old calc
+//                        contentStream.drawImage(pdImage, 9.95f, 275f, targetWidth, targetHeight);
+                        //new calc
+                        contentStream.drawImage(pdImage, mediaBoxBottomLeftX, y, scaledWidth, scaledHeight);
 
                     } else {
                         // For portrait mode, keep the existing coordinates and dimensions
                         System.out.println("Protrait" + "\n");
 
-                        imageX = (float) (0.5 * (pageWidth - 648.0 / (double) pdImage.getHeight() * (double) pdImage.getWidth()));
-                        imageY = 139.0F;//144.0F
-                        imageWidth = (float) (648.0 / (double) pdImage.getHeight() * (double) pdImage.getWidth());
-                        imageHeight = 638.0F;
-                        contentStream.drawImage(pdImage, imageX, imageY, imageWidth, imageHeight);
+                        //old calc
+//                        imageX = (float) (0.5 * (pageWidth - 648.0 / (double) pdImage.getHeight() * (double) pdImage.getWidth()));
+//                        imageY = 139.0F;//144.0F
+//                        imageWidth = (float) (648.0 / (double) pdImage.getHeight() * (double) pdImage.getWidth());
+//                        imageHeight = 638.0F;
+//                        contentStream.drawImage(pdImage, imageX, imageY, imageWidth, imageHeight);
+
+                        //new calc
+                        contentStream.drawImage(pdImage, x, mediaBoxBottomLeftY, scaledWidth, scaledHeight);
 
                     }
 
