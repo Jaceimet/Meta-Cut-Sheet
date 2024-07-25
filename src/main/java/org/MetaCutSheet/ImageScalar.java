@@ -4,12 +4,14 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 public class ImageScalar {
 
-    float mediaBoxWidth;
+     float mediaBoxWidth;
      float mediaBoxHeight;
      float mediaBoxBottomLeftX;
      float mediaBoxBottomLeftY;
      float imageWidth;
      float imageHeight;
+
+     float scale;
 
     public ImageScalar(float mediaBoxWidth, float mediaBoxHeight, float mediaBoxBottomLeftX, float mediaBoxBottomLeftY,
                        PDImageXObject pdImage) {
@@ -21,9 +23,10 @@ public class ImageScalar {
         // Get image dimensions from pdImage2
         this.imageWidth = pdImage.getWidth();
         this.imageHeight = pdImage.getHeight();
-    }
 
-    float scale = Math.min(mediaBoxWidth / imageWidth, mediaBoxHeight / imageHeight);
+        // Get scale of image
+        this.scale = Math.min(mediaBoxWidth / imageWidth, mediaBoxHeight / imageHeight);
+    }
 
     public float getScaledWidth() {
         // Scale fit image to media box

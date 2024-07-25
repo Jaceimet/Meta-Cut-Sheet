@@ -99,13 +99,9 @@ public class PdfImageCreator {
                 ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
                         mediaBoxBottomLeftY, pdImage2);
                 float scaledWidth = imageScalar.getScaledWidth();
-                System.out.println(scaledWidth);
                 float scaledHeight = imageScalar.getScaledHeight();
-                System.out.println(scaledHeight);
                 float adjustedX = imageScalar.getAdjustedX();
-                System.out.println(adjustedX);
                 float adjustedY = imageScalar.getAdjustedY();
-                System.out.println(adjustedY);
                 ////////////////////////////////////////////////////////
 
 
@@ -180,39 +176,49 @@ public class PdfImageCreator {
                     BufferedImage image = pdfRenderer.renderImageWithDPI(i, 300.0F);
                     PDImageXObject pdImage = LosslessFactory.createFromImage(userDocument, image);
 
+                    ////////////////////
+                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+                            mediaBoxBottomLeftY, pdImage);
+                    float scaledWidth = imageScalar.getScaledWidth();
+                    float scaledHeight = imageScalar.getScaledHeight();
+                    float adjustedX = imageScalar.getAdjustedX();
+                    float adjustedY = imageScalar.getAdjustedY();
+
+                    ///////////////////
+
                     /////// new calc
                     //image dimensions
-                    float imageWidth = pdImage.getWidth();
-                    System.out.println("image width: " + imageWidth+ "\n");
-                    float imageHeight = pdImage.getHeight();
-                    System.out.println("image height: " + imageHeight+ "\n");
-
-                    //scale fit image to media box
-                    float scale = Math.min(mediaBoxWidth / imageWidth, mediaBoxHeight/ imageHeight);
-                    System.out.println("Scale : " + scale + "\n");
-                    float scaledWidth = imageWidth * scale;
-                    System.out.println("scaledWidth "+scaledWidth+ "\n");
-                    float scaledHeight = imageHeight * scale;
-                    System.out.println("scaledHeight "+scaledHeight+ "\n");
-
-                    // dynamically adjust x,y to input
-                    float x = (mediaBoxWidth - scaledWidth)/2 + mediaBoxBottomLeftX;
-                    System.out.println("x= "+ x + "\n");
-                    float y = (mediaBoxHeight - scaledHeight)/ 2 + mediaBoxBottomLeftY;
-                    System.out.println("y= "+ y + "\n");
+//                    float imageWidth = pdImage.getWidth();
+//                    System.out.println("image width: " + imageWidth+ "\n");
+//                    float imageHeight = pdImage.getHeight();
+//                    System.out.println("image height: " + imageHeight+ "\n");
+//
+//                    //scale fit image to media box
+//                    float scale = Math.min(mediaBoxWidth / imageWidth, mediaBoxHeight/ imageHeight);
+//                    System.out.println("Scale : " + scale + "\n");
+//                    float scaledWidth = imageWidth * scale;
+//                    System.out.println("scaledWidth "+scaledWidth+ "\n");
+//                    float scaledHeight = imageHeight * scale;
+//                    System.out.println("scaledHeight "+scaledHeight+ "\n");
+//
+//                    // dynamically adjust x,y to input
+//                    float x = (mediaBoxWidth - scaledWidth)/2 + mediaBoxBottomLeftX;
+//                    System.out.println("x= "+ x + "\n");
+//                    float y = (mediaBoxHeight - scaledHeight)/ 2 + mediaBoxBottomLeftY;
+//                    System.out.println("y= "+ y + "\n");
                     //////////////////////
 
                     if (isLandscape) {
 
                         System.out.println("Landscape" + "\n");
 
-                        contentStream.drawImage(pdImage, mediaBoxBottomLeftX, y, scaledWidth, scaledHeight);
+                        contentStream.drawImage(pdImage, mediaBoxBottomLeftX, adjustedY, scaledWidth, scaledHeight);
 
                     } else {
 
                         System.out.println("Protrait" + "\n");
 
-                        contentStream.drawImage(pdImage, x, mediaBoxBottomLeftY, scaledWidth, scaledHeight);
+                        contentStream.drawImage(pdImage, adjustedX, mediaBoxBottomLeftY, scaledWidth, scaledHeight);
 
                     }
 
