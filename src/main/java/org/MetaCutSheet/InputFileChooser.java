@@ -21,6 +21,18 @@ public class InputFileChooser {
         fileChooser.setCurrentDirectory(testFile);
         fileChooser.setDialogTitle("Choose File to Convert");
 
+        // need to add muti-file option for images
+        //https://stackoverflow.com/questions/11922152/jfilechooser-to-open-multiple-txt-files
+        /////////////////
+//        JFileChooser chooser = new JFileChooser();
+//        chooser.setMultiSelectionEnabled(true);
+//        chooser.showOpenDialog(frame);
+//        File[] files = chooser.getSelectedFiles();
+//        if(files.length >= 2) {
+//            compare(readFileAsList(files[0]), readFileAsList(files[1]));
+//        }
+        //////////////////////
+
         // Show the file chooser dialog
         int result = fileChooser.showOpenDialog(null);
 
@@ -28,9 +40,10 @@ public class InputFileChooser {
         String selectedFilePath = null;
         // Check if a file was selected
         if (result == JFileChooser.APPROVE_OPTION) {
-            // Get the selected file
-            java.io.File file = fileChooser.getSelectedFile();
-            selectedFilePath = file.getAbsolutePath();
+
+                // Get the selected file
+                java.io.File file = fileChooser.getSelectedFile();
+                selectedFilePath = file.getAbsolutePath();
 
             System.out.println("\n" + "Selected input file: " + file.getAbsolutePath() + "\n");
         } else {
@@ -38,6 +51,7 @@ public class InputFileChooser {
         }
 
         return selectedFilePath;
+
     }
 
 }

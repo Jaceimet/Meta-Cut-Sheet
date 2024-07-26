@@ -44,21 +44,21 @@ public class PdfImageCreator {
             //find template measurements
             PDRectangle pageSize = existingDocument.getPage(0).getMediaBox();
             float existingPageWidth = pageSize.getWidth();
-            System.out.println("existingPageWidth "+existingPageWidth+ "\n");
+            System.out.println("existingPageWidth " + existingPageWidth + "\n");
             float existingPageHeight = pageSize.getHeight();
-            System.out.println("existingPageHeight "+existingPageHeight+ "\n");
+            System.out.println("existingPageHeight " + existingPageHeight + "\n");
 
             //(W.593, H.644 inside the box (Aspect ratio = 1.086003))
             // box area = 381,892
             // aspect = 0.7071 (portrait? long side divided by the short side)
             // portrait aspect ratio = long side divided by the short side
-        }catch (IOException e) {
-        System.err.println("Error processing template: " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Error processing template: " + e.getMessage());
         }
 
-        try{
+        try {
             type = Files.probeContentType(Paths.get(inputUserFile));
-        }catch (IOException e) {
+        } catch (IOException e) {
             System.err.println("Error processing inputUserFile type: " + e.getMessage());
         }
 
@@ -68,47 +68,11 @@ public class PdfImageCreator {
 
             if (type != null && type.equals("image/png") || type != null && type.equals("image/jpeg")) {
 
-                System.out.println("File is an "+ type +" type\n");
+                System.out.println("File is an " + type + " type\n");
 
                 final_cs.addPage(temp_page);
 
                 pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
-
-
-                // needs to be a separate class?
-
-                ///////////////////////////////////
-//                //image dimensions
-//                float imageWidth = pdImage2.getWidth();
-//                System.out.println("image width: " + imageWidth+ "\n");
-//                float imageHeight = pdImage2.getHeight();
-//                System.out.println("image height: " + imageHeight+ "\n");
-//
-//                //scale fit image to media box
-//                float scale = Math.min(mediaBoxWidth / imageWidth, mediaBoxHeight/ imageHeight);
-//                System.out.println("Scale : " + scale + "\n");
-//                float scaledWidth = imageWidth * scale;
-//                System.out.println("scaledWidth "+scaledWidth+ "\n");
-//                float scaledHeight = imageHeight * scale;
-//                System.out.println("scaledHeight "+scaledHeight+ "\n");
-//
-//                // dynamically adjust x,y to input
-//                float adjustedX = (mediaBoxWidth - scaledWidth)/2 + mediaBoxBottomLeftX;
-//                System.out.println("x= "+ adjustedX + "\n");
-//                float adjustedY = (mediaBoxHeight - scaledHeight)/ 2 + mediaBoxBottomLeftY;
-//                System.out.println("y= "+ adjustedY + "\n");
-
-                ////////////////////////////////////////////////////////
-
-                //functional call to imagescalar
-//                ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
-//                        mediaBoxBottomLeftY, pdImage2);
-//                float scaledWidth = imageScalar.getScaledWidth();
-//                float scaledHeight = imageScalar.getScaledHeight();
-//                float adjustedX = imageScalar.getAdjustedX();
-//                float adjustedY = imageScalar.getAdjustedY();
-                ////////////////////////////////////////////////////////
-
 
 
                 // non-functional scale stretch to media box (optional calculation)
@@ -127,28 +91,25 @@ public class PdfImageCreator {
                 if (isLandscape) {
                     System.out.println("image is in landscape orientation" + "\n");
 
-//                    contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, adjustedY, scaledWidth, scaledHeight);
-
                     ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
                             mediaBoxBottomLeftY, pdImage2);
+
                     contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
                             imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
 
                     contentStream.close();
-                }else {
+
+                } else {
                     System.out.println("image is in portrait orientation" + "\n");
 
                     // non-functional stretch to media box (optional implementation)
 //                    contentStream.drawImage(pdImage2, 9.95f, 139f, scaledWidth2, scaledHeight2);
 
-                    // perfect portrait centered long code
-//                    contentStream.drawImage(pdImage2, adjustedX, mediaBoxBottomLeftY, scaledWidth, scaledHeight);
-
                     ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
-                        mediaBoxBottomLeftY, pdImage2);
+                            mediaBoxBottomLeftY, pdImage2);
 
                     contentStream.drawImage(pdImage2, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
-                            imageScalar.getScaledWidth(),imageScalar.getScaledHeight());
+                            imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
 
                     contentStream.close();
 
@@ -160,107 +121,78 @@ public class PdfImageCreator {
                 System.out.println("File is a " + type + " type\n");
 
 
-        try {
+                try {
 
-         //PDF processing
+                    //PDF processing
 
-            // Load user file
-            PDDocument userDocument = Loader.loadPDF(new File(inputUserFile));
-            //convert user pdf to image
-            PDFRenderer pdfRenderer = new PDFRenderer(userDocument);
-
-
-            int i;
-            for (i = 0; i < userDocument.getNumberOfPages(); ++i) {
-                final_cs.importPage(temp_page);
-
-            }
-
-            System.out.println("final_Cs has " + i + " pages" + "\n");
+                    // Load user file
+                    PDDocument userDocument = Loader.loadPDF(new File(inputUserFile));
+                    //convert user pdf to image
+                    PDFRenderer pdfRenderer = new PDFRenderer(userDocument);
 
 
-            for (i = 0; i < userDocument.getNumberOfPages(); ++i) {
-                //check for orientation
-                PDRectangle pageSize = userDocument.getPage(i).getMediaBox();
-                int degree = userDocument.getPage(i).getRotation();
-                boolean isLandscape;
-                isLandscape = (pageSize.getWidth() > pageSize.getHeight()) || (degree == 90) || (degree == 270);
-
-
-                try (PDPageContentStream contentStream = new PDPageContentStream(userDocument, final_cs.getPage(i),
-                        PDPageContentStream.AppendMode.APPEND, false)) {
-                    BufferedImage image = pdfRenderer.renderImageWithDPI(i, 300.0F);
-                    PDImageXObject pdImage = LosslessFactory.createFromImage(userDocument, image);
-
-                    ////////////////////
-//                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
-//                            mediaBoxBottomLeftY, pdImage);
-//                    float scaledWidth = imageScalar.getScaledWidth();
-//                    float scaledHeight = imageScalar.getScaledHeight();
-//                    float adjustedX = imageScalar.getAdjustedX();
-//                    float adjustedY = imageScalar.getAdjustedY();
-
-
-                    ///////////////////
-
-                    /////// new calc
-                    //image dimensions
-//                    float imageWidth = pdImage.getWidth();
-//                    System.out.println("image width: " + imageWidth+ "\n");
-//                    float imageHeight = pdImage.getHeight();
-//                    System.out.println("image height: " + imageHeight+ "\n");
-//
-//                    //scale fit image to media box
-//                    float scale = Math.min(mediaBoxWidth / imageWidth, mediaBoxHeight/ imageHeight);
-//                    System.out.println("Scale : " + scale + "\n");
-//                    float scaledWidth = imageWidth * scale;
-//                    System.out.println("scaledWidth "+scaledWidth+ "\n");
-//                    float scaledHeight = imageHeight * scale;
-//                    System.out.println("scaledHeight "+scaledHeight+ "\n");
-//
-//                    // dynamically adjust x,y to input
-//                    float adjustedX = (mediaBoxWidth - scaledWidth)/2 + mediaBoxBottomLeftX;
-//                    System.out.println("x= "+ adjustedX + "\n");
-//                    float adjustedY = (mediaBoxHeight - scaledHeight)/ 2 + mediaBoxBottomLeftY;
-//                    System.out.println("y= "+ adjustedY + "\n");
-                    //////////////////////
-
-                    if (isLandscape) {
-
-                        System.out.println("Landscape" + "\n");
-
-//                        contentStream.drawImage(pdImage, mediaBoxBottomLeftX, adjustedY, scaledWidth, scaledHeight);
-
-                        ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
-                                mediaBoxBottomLeftY, pdImage);
-                        contentStream.drawImage(pdImage, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
-                                imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
-
-                    } else {
-
-                        System.out.println("Protrait" + "\n");
-
-//                        contentStream.drawImage(pdImage, adjustedX, mediaBoxBottomLeftY, scaledWidth, scaledHeight);
-
-                        ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
-                                mediaBoxBottomLeftY, pdImage);
-                        contentStream.drawImage(pdImage, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
-                                imageScalar.getScaledWidth(),imageScalar.getScaledHeight());
+                    int i;
+                    for (i = 0; i < userDocument.getNumberOfPages(); ++i) {
+                        final_cs.importPage(temp_page);
 
                     }
 
+                    System.out.println("final_Cs has " + i + " pages" + "\n");
+
+
+                    for (i = 0; i < userDocument.getNumberOfPages(); ++i) {
+                        //check for orientation
+                        PDRectangle pageSize = userDocument.getPage(i).getMediaBox();
+                        int degree = userDocument.getPage(i).getRotation();
+                        boolean isLandscape;
+                        isLandscape = (pageSize.getWidth() > pageSize.getHeight()) || (degree == 90) || (degree == 270);
+
+
+                        try (PDPageContentStream contentStream = new PDPageContentStream(userDocument, final_cs.getPage(i),
+                                PDPageContentStream.AppendMode.APPEND, false)) {
+                            BufferedImage image = pdfRenderer.renderImageWithDPI(i, 300.0F);
+                            PDImageXObject pdImage = LosslessFactory.createFromImage(userDocument, image);
+
+
+                            if (isLandscape) {
+
+                                System.out.println("Landscape" + "\n");
+
+                                ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+                                        mediaBoxBottomLeftY, pdImage);
+
+                                contentStream.drawImage(pdImage, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
+                                        imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+
+                            } else {
+
+                                System.out.println("Protrait" + "\n");
+
+                                ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+                                        mediaBoxBottomLeftY, pdImage);
+
+                                contentStream.drawImage(pdImage, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
+                                        imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+
+                            }
+
+                        }
+
+                    }
+
+                } catch (IOException e) {
+                    System.err.println("Error processing PDFs: " + e.getMessage());
                 }
-
             }
 
-        } catch (IOException e) {
-            System.err.println("Error processing PDFs: " + e.getMessage());
-        }
+//            } else
+//                System.out.println("Not a supported file type");
+//                JFrame frame = new JFrame("Error");
+//                JOptionPane.showMessageDialog(frame, "Not a supported file type, App shutting down...");
+//                frame.dispose();
+//                System.exit(1);
 
-
-            }
-
-        }catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Not a supported file type: " + e.getMessage());
         }
 
