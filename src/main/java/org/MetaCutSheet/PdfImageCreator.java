@@ -25,10 +25,10 @@ public class PdfImageCreator {
         PDPage temp_page = null;
         PDDocument existingDocument;
         PDImageXObject pdImage2;
-        float scaledWidth = 0;
-        float scaledHeight = 0;
-        float adjustedX = 0;
-        float adjustedY = 0;
+//        float scaledWidth = 0;
+//        float scaledHeight = 0;
+//        float adjustedX = 0;
+//        float adjustedY = 0;
 
         //media box dimensions
         float mediaBoxWidth = 593F; //638.0F
@@ -66,7 +66,7 @@ public class PdfImageCreator {
 
             //image handling, needs refining
 
-            if (type != null && type.equals("image/png") || type.equals("image/jpeg")) {
+            if (type != null && type.equals("image/png") || type != null && type.equals("image/jpeg")) {
 
                 System.out.println("File is an "+ type +" type\n");
 
@@ -74,8 +74,6 @@ public class PdfImageCreator {
 
                 pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
 
-                imageProcessor(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX, mediaBoxBottomLeftY,
-                pdImage2);
 
                 // needs to be a separate class?
 
@@ -129,7 +127,12 @@ public class PdfImageCreator {
                 if (isLandscape) {
                     System.out.println("image is in landscape orientation" + "\n");
 
-                    contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, adjustedY, scaledWidth, scaledHeight);
+//                    contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, adjustedY, scaledWidth, scaledHeight);
+
+                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+                            mediaBoxBottomLeftY, pdImage2);
+                    contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
+                            imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
 
                     contentStream.close();
                 }else {
@@ -138,11 +141,14 @@ public class PdfImageCreator {
                     // non-functional stretch to media box (optional implementation)
 //                    contentStream.drawImage(pdImage2, 9.95f, 139f, scaledWidth2, scaledHeight2);
 
-                    imageProcessor(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX, mediaBoxBottomLeftY,
-                            pdImage2);
-                    System.out.println("scaledWidth: "+ scaledWidth);
-                    // perfect portrait centered
-                    contentStream.drawImage(pdImage2, adjustedX, mediaBoxBottomLeftY, scaledWidth, scaledHeight);
+                    // perfect portrait centered long code
+//                    contentStream.drawImage(pdImage2, adjustedX, mediaBoxBottomLeftY, scaledWidth, scaledHeight);
+
+                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+                        mediaBoxBottomLeftY, pdImage2);
+
+                    contentStream.drawImage(pdImage2, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
+                            imageScalar.getScaledWidth(),imageScalar.getScaledHeight());
 
                     contentStream.close();
 
@@ -223,13 +229,23 @@ public class PdfImageCreator {
 
                         System.out.println("Landscape" + "\n");
 
-                        contentStream.drawImage(pdImage, mediaBoxBottomLeftX, adjustedY, scaledWidth, scaledHeight);
+//                        contentStream.drawImage(pdImage, mediaBoxBottomLeftX, adjustedY, scaledWidth, scaledHeight);
+
+                        ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+                                mediaBoxBottomLeftY, pdImage);
+                        contentStream.drawImage(pdImage, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
+                                imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
 
                     } else {
 
                         System.out.println("Protrait" + "\n");
 
-                        contentStream.drawImage(pdImage, adjustedX, mediaBoxBottomLeftY, scaledWidth, scaledHeight);
+//                        contentStream.drawImage(pdImage, adjustedX, mediaBoxBottomLeftY, scaledWidth, scaledHeight);
+
+                        ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+                                mediaBoxBottomLeftY, pdImage);
+                        contentStream.drawImage(pdImage, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
+                                imageScalar.getScaledWidth(),imageScalar.getScaledHeight());
 
                     }
 
@@ -251,34 +267,4 @@ public class PdfImageCreator {
         return final_cs;
 
     }
-    float scaledWidth;
-    float scaledHeight;
-    public void imageProcessor(float mediaBoxWidth, float mediaBoxHeight, float mediaBoxBottomLeftX, float mediaBoxBottomLeftY,
-                                      PDImageXObject pdImage2){
-
-        float imageWidth = pdImage2.getWidth();
-        System.out.println("image width: " + imageWidth+ "\n");
-        float imageHeight = pdImage2.getHeight();
-        System.out.println("image height: " + imageHeight+ "\n");
-
-        //scale fit image to media box
-        float scale = Math.min(mediaBoxWidth / imageWidth, mediaBoxHeight/ imageHeight);
-        System.out.println("Scale : " + scale + "\n");
-        scaledWidth = imageWidth * scale;
-        System.out.println("scaledWidth "+scaledWidth+ "\n");
-        scaledHeight = imageHeight * scale;
-        System.out.println("scaledHeight "+scaledHeight+ "\n");
-
-        // dynamically adjust x,y to input
-        float adjustedX = (mediaBoxWidth - scaledWidth)/2 + mediaBoxBottomLeftX;
-        System.out.println("x= "+ adjustedX + "\n");
-        float adjustedY = (mediaBoxHeight - scaledHeight)/ 2 + mediaBoxBottomLeftY;
-        System.out.println("y= "+ adjustedY + "\n");
-
-
-
-
-    }
-
-
 }
