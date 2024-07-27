@@ -65,6 +65,7 @@ public class FormSelector {
 
 
             // Return the user's selection
+            System.out.println("Template chosen: " + userSelection);
             return userSelection;
         }
     }

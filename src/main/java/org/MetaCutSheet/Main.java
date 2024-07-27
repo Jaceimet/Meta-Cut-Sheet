@@ -18,14 +18,17 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-//        PdfImageCreator.PDFRescale();
 
         String template = FormSelector.displayForm();
 
-        System.out.println("Template chosen: " + template);
-
         String inputUserFile = InputFileChooser.userFile();
 
+//        File[] userFile = InputFileChooser.multipleFileUserInput();
+//
+//        for (int i = userFile.length -1; i >= 0; i--) {
+//            System.out.println(userFile[i]);
+//        }
+//        System.exit(0);
 
         /* Code is funtional but lacks complexity needed
          * https://stackoverflow.com/questions/23326562/convert-pdf-files-to-images-with-pdfbox

@@ -25,10 +25,7 @@ public class PdfImageCreator {
         PDPage temp_page = null;
         PDDocument existingDocument;
         PDImageXObject pdImage2;
-//        float scaledWidth = 0;
-//        float scaledHeight = 0;
-//        float adjustedX = 0;
-//        float adjustedY = 0;
+
 
         //media box dimensions
         float mediaBoxWidth = 593F; //638.0F
@@ -84,6 +81,7 @@ public class PdfImageCreator {
 
                 PDPageContentStream contentStream = new PDPageContentStream(final_cs, temp_page,
                         PDPageContentStream.AppendMode.APPEND, false);
+
 
                 boolean isLandscape = pdImage2.getHeight() < pdImage2.getWidth();
 
