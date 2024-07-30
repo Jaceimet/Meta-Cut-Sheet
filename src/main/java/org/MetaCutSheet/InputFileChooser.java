@@ -18,11 +18,12 @@ public class InputFileChooser {
         // Optionally, set the file chooser to select only files with a specific extension
         // need to figure out how to save last file path*********************
 
-        File testFile = new File("C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets");
-//        File testFile = new File("C:\\Users\\Public\\Desktop"); (.exe version)
+///////////////////////////// For Test Mode
+//        File testFile = new File("C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets");
+/////////////////////////////
+
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF & Image Files", "pdf", "jpg", "png");
         fileChooser.setFileFilter(filter);
-        fileChooser.setCurrentDirectory(testFile);
         fileChooser.setDialogTitle("Choose File to Convert");
 
 

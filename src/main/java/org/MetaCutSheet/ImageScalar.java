@@ -13,8 +13,8 @@ public class ImageScalar {
 
      float scale;
 
-    public ImageScalar(float mediaBoxWidth, float mediaBoxHeight, float mediaBoxBottomLeftX, float mediaBoxBottomLeftY,
-                       PDImageXObject pdImage) {
+    public ImageScalar(float mediaBoxWidth, float mediaBoxHeight, float mediaBoxBottomLeftX,
+                       float mediaBoxBottomLeftY, PDImageXObject pdImage) {
         this.mediaBoxWidth = mediaBoxWidth;
         this.mediaBoxHeight = mediaBoxHeight;
         this.mediaBoxBottomLeftX = mediaBoxBottomLeftX;

@@ -3,7 +3,6 @@ package org.MetaCutSheet;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
 import javax.swing.*;
-import java.io.File;
 import java.io.IOException;
 
 public class SaveFinalPDF {
@@ -15,9 +14,10 @@ public class SaveFinalPDF {
         //String selectedSaveFilePath = null;
         JFileChooser saveFileChooser = new JFileChooser();
 
-        //File firstSaveDir = new File("C:\\Users\\James\\Desktop"); (for .exe version)
-        File firstSaveDir = new File("C:\\Users\\James\\Desktop\\temp");
-        saveFileChooser.setCurrentDirectory(firstSaveDir);
+////////////////////////////// For test mode
+//        File firstSaveDir = new File("C:\\Users\\James\\Desktop\\temp");
+//////////////////////////////
+
         saveFileChooser.setDialogTitle("Choose Save Directory");
 
         // Show the file chooser dialog
