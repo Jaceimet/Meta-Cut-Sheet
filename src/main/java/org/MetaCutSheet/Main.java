@@ -11,7 +11,10 @@ import java.io.IOException;
 * needs to handle multiple images for one pdf
 * needs to handle mixed orientation (maybe)
 * Nests a Cut Sheet PDF or image of a Cut Sheet PDF onto a project summary form.
+* .exe instructions: https://www.youtube.com/watch?v=jKlyHG-zbjk, https://www.youtube.com/watch?v=N4MfDEGOEy4
  */
+
+
 
 
 public class Main {
