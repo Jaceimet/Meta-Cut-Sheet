@@ -79,6 +79,7 @@ public class PdfImageCreator {
 //                System.out.println("scaledHeight2 "+scaledHeight2);
 
 
+                assert temp_page != null;
                 PDPageContentStream contentStream = new PDPageContentStream(final_cs, temp_page,
                         PDPageContentStream.AppendMode.APPEND, false);
 
@@ -114,72 +115,75 @@ public class PdfImageCreator {
                 }
 
 
-            } else if (type.equals("application/pdf")) {
+            } else {
+                assert type != null;
+                if (type.equals("application/pdf")) {
 
-                System.out.println("File is a " + type + " type\n");
-
-
-                try {
-
-                    //PDF processing
-
-                    // Load user file
-                    PDDocument userDocument = Loader.loadPDF(new File(inputUserFile));
-                    //convert user pdf to image
-                    PDFRenderer pdfRenderer = new PDFRenderer(userDocument);
+                    System.out.println("File is a " + type + " type\n");
 
 
-                    int i;
-                    for (i = 0; i < userDocument.getNumberOfPages(); ++i) {
-                        final_cs.importPage(temp_page);
+                    try {
 
-                    }
+                        //PDF processing
 
-                    System.out.println("final_Cs has " + i + " pages" + "\n");
-
-
-                    for (i = 0; i < userDocument.getNumberOfPages(); ++i) {
-                        //check for orientation
-                        PDRectangle pageSize = userDocument.getPage(i).getMediaBox();
-                        int degree = userDocument.getPage(i).getRotation();
-                        boolean isLandscape;
-                        isLandscape = (pageSize.getWidth() > pageSize.getHeight()) || (degree == 90) || (degree == 270);
+                        // Load user file
+                        PDDocument userDocument = Loader.loadPDF(new File(inputUserFile));
+                        //convert user pdf to image
+                        PDFRenderer pdfRenderer = new PDFRenderer(userDocument);
 
 
-                        try (PDPageContentStream contentStream = new PDPageContentStream(userDocument, final_cs.getPage(i),
-                                PDPageContentStream.AppendMode.APPEND, false)) {
-                            BufferedImage image = pdfRenderer.renderImageWithDPI(i, 300.0F);
-                            PDImageXObject pdImage = LosslessFactory.createFromImage(userDocument, image);
+                        int i;
+                        for (i = 0; i < userDocument.getNumberOfPages(); ++i) {
+                            final_cs.importPage(temp_page);
+
+                        }
+
+                        System.out.println("final_Cs has " + i + " pages" + "\n");
 
 
-                            if (isLandscape) {
+                        for (i = 0; i < userDocument.getNumberOfPages(); ++i) {
+                            //check for orientation
+                            PDRectangle pageSize = userDocument.getPage(i).getMediaBox();
+                            int degree = userDocument.getPage(i).getRotation();
+                            boolean isLandscape;
+                            isLandscape = (pageSize.getWidth() > pageSize.getHeight()) || (degree == 90) || (degree == 270);
 
-                                System.out.println("Landscape" + "\n");
 
-                                ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
-                                        mediaBoxBottomLeftY, pdImage);
+                            try (PDPageContentStream contentStream = new PDPageContentStream(userDocument, final_cs.getPage(i),
+                                    PDPageContentStream.AppendMode.APPEND, false)) {
+                                BufferedImage image = pdfRenderer.renderImageWithDPI(i, 300.0F);
+                                PDImageXObject pdImage = LosslessFactory.createFromImage(userDocument, image);
 
-                                contentStream.drawImage(pdImage, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
-                                        imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
 
-                            } else {
+                                if (isLandscape) {
 
-                                System.out.println("Protrait" + "\n");
+                                    System.out.println("Landscape" + "\n");
 
-                                ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
-                                        mediaBoxBottomLeftY, pdImage);
+                                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+                                            mediaBoxBottomLeftY, pdImage);
 
-                                contentStream.drawImage(pdImage, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
-                                        imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+                                    contentStream.drawImage(pdImage, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
+                                            imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+
+                                } else {
+
+                                    System.out.println("Portrait" + "\n");
+
+                                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+                                            mediaBoxBottomLeftY, pdImage);
+
+                                    contentStream.drawImage(pdImage, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
+                                            imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+
+                                }
 
                             }
 
                         }
 
+                    } catch (IOException e) {
+                        System.err.println("Error processing PDFs: " + e.getMessage());
                     }
-
-                } catch (IOException e) {
-                    System.err.println("Error processing PDFs: " + e.getMessage());
                 }
             }
 
