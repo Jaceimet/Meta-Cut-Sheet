@@ -1,14 +1,26 @@
 package org.MetaCutSheet;
 
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.io.RandomAccessReadBufferedFile;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class FormSelector {
 
         static String userSelection;
 
-        public static String displayForm() {
+//        static File userTemplateFile;
+
+        static RandomAccessReadBufferedFile userTemplateStream;
+
+        static String devicePath = "C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\src\\main\\resources\\Template_Device.pdf";
+        static String fixturePath = "src/main/resources/Template_Fixture.pdf";
+
+        public static RandomAccessReadBufferedFile displayForm() {
             // Create a frame
             JFrame frame = new JFrame("Select Form");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,18 +70,38 @@ public class FormSelector {
             if (userSelection == "Device Form") {
 //                userSelection = "C:\\Computer Programming Projects\\Udemy\\Data Structures and Algorithms\\PDF_Express_2\\src\\main\\resources\\Template_Device.pdf";
 //                userSelection = "C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\src\\main\\resources\\Template_Device.pdf";
-                userSelection = ("src/Template_Device.pdf");
+                /// non-functional
+//                userTemplateFile = new File( "src/main/Templates/Template_Device.pdf");
+//                userTemplateStream = FormSelector.class.getResourceAsStream("/src/main/Templates/Template_Device.pdf");
+//                try {
+//                    userTemplateStream = new RandomAccessReadBufferedFile("Template_Device.pdf");
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+
+                try (InputStream inputStream = Loader.class.getResourceAsStream(devicePath)) {
+                    if (inputStream == null) {
+                        System.out.println("PDF file not found.");
+//                        return inputStream;
+                    }}catch (Exception e) {
+                        e.printStackTrace();}
 
             } else {
 //                userSelection = "C:\\Computer Programming Projects\\Udemy\\Data Structures and Algorithms\\PDF_Express_2\\src\\main\\resources\\Template_Fixture.pdf";
 //                userSelection = "C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\src\\main\\resources\\Template_Fixture.pdf";
-                userSelection = "/src/main/Templates/Template_Fixture.pdf";
+//                userTemplateFile = new File( "src/main/Templates/Template_Fixture.pdf");
+//                userTemplateStream = FormSelector.class.getResourceAsStream("/src/main/Templates/Template_Fixture.pdf");
+                try {
+                    userTemplateStream = new RandomAccessReadBufferedFile("Template_Fixture.pdf");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
 
             // Return the user's selection
             System.out.println("Template chosen: " + userSelection);
-            return userSelection;
+            return userTemplateStream;
         }
     }
 
