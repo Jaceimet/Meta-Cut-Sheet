@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 
 public class PdfImageCreator {
 
-    public static PDDocument pdfGenerator(RandomAccessReadBufferedFile template, String inputUserFile) {
+    public static PDDocument pdfGenerator(String template, String inputUserFile) {
 
         PDDocument final_cs = new PDDocument();
         String type = null;
@@ -36,7 +36,8 @@ public class PdfImageCreator {
 
         // Load template
         try {
-            existingDocument = Loader.loadPDF(template);
+//            existingDocument = Loader.loadPDF(new File(template));
+            existingDocument = Loader.loadPDF(new RandomAccessReadBufferedFile(template));
             temp_page = existingDocument.getPage(0);
 
             //find template measurements

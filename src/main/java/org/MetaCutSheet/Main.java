@@ -1,10 +1,8 @@
 package org.MetaCutSheet;
 
-import org.apache.pdfbox.io.RandomAccessReadBufferedFile;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 /* Notes: code needs to be cleaned
 * needs preferences / save last save location
@@ -24,7 +22,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
 
-        RandomAccessReadBufferedFile template = FormSelector.displayForm();
+        String template = FormSelector.displayForm();
 
         String inputUserFile = InputFileChooser.userFile();
 
