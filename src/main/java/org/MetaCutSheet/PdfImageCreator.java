@@ -1,7 +1,6 @@
 package org.MetaCutSheet;
 
 import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.io.RandomAccessReadBufferedFile;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -34,10 +33,13 @@ public class PdfImageCreator {
         float mediaBoxBottomLeftX = 9.95f;
         float mediaBoxBottomLeftY = 139f;
 
+        System.out.println(template);
         // Load template
         try {
-//            existingDocument = Loader.loadPDF(new File(template));
-            existingDocument = Loader.loadPDF(new RandomAccessReadBufferedFile(template));
+            existingDocument = Loader.loadPDF(new File(template));
+
+//            RandomAccessReadBufferedFile templateRAR = new RandomAccessReadBufferedFile(new File(template));
+//            existingDocument = Loader.loadPDF(template);
             temp_page = existingDocument.getPage(0);
 
             //find template measurements
@@ -53,12 +55,15 @@ public class PdfImageCreator {
             // portrait aspect ratio = long side divided by the short side
         } catch (IOException e) {
             System.err.println("Error processing template: " + e.getMessage());
+            ErrorMessages.templateCrash();
+            System.exit(0);
         }
 
         try {
             type = Files.probeContentType(Paths.get(inputUserFile));
         } catch (IOException e) {
             System.err.println("Error processing inputUserFile type: " + e.getMessage());
+
         }
 
         try {

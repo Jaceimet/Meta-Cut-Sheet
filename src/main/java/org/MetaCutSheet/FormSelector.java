@@ -64,13 +64,14 @@ public class FormSelector {
         // Modify user return data
         if (userSelection == "Device Form") {
 //                userSelection = "C:\\Computer Programming Projects\\Udemy\\Data Structures and Algorithms\\PDF_Express_2\\src\\main\\resources\\Template_Device.pdf";
-            ///Functional
+            ///Functional absolute path
 //                userSelection = "C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\src\\main\\resources\\Template_Device.pdf";
-
+//            userSelection = "C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\Template_Device.pdf";
             /// non-functional
-//            userSelection = "/src/main/resources/Template_Device.pdf";
-//            userSelection = "Template_Device.pdf";
-            userSelection = "./resources/Template_Device.pdf";
+//            userSelection = "src/main/resources/Template_Device.pdf";
+            userSelection = "Template_Device.pdf";
+//            userSelection = "resources/Template_Device.pdf";
+
 
 
 //                userTemplateFile = new File( "src/main/Templates/Template_Device.pdf");
