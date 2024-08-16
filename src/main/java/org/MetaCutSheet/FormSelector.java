@@ -68,8 +68,9 @@ public class FormSelector {
 //                userSelection = "C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\src\\main\\resources\\Template_Device.pdf";
 //            userSelection = "C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\Template_Device.pdf";
             /// non-functional
-//            userSelection = "src/main/resources/Template_Device.pdf";
+//            userSelection = "org/MetaCutSheet/Template_Device.pdf";
             userSelection = "Template_Device.pdf";
+//            userSelection = "";
 //            userSelection = "resources/Template_Device.pdf";
 
 
@@ -107,6 +108,7 @@ public class FormSelector {
             System.out.println("Template chosen: " + userSelection);
 //            return userTemplateStream;
         }
+        System.out.println("Template chosen: " + userSelection);
         return userSelection;
     }
 

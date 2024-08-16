@@ -1,5 +1,6 @@
 package org.MetaCutSheet;
 
+import org.apache.commons.codec.Resources;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -12,6 +13,7 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -33,10 +35,23 @@ public class PdfImageCreator {
         float mediaBoxBottomLeftX = 9.95f;
         float mediaBoxBottomLeftY = 139f;
 
+//        InputStream templateFile = Resources.class.getResourceAsStream(template);
+//        InputStream input = PdfImageCreator.getClass().getResourceAsStream(template);
+        URL url = Resources.class.getResource("/org/MetaCutSheet/Template_Device.pdf");
+        System.out.println(url);
+        File templateFile = new File(template);
+        System.out.println(templateFile.exists());
+        System.out.println(templateFile.isDirectory());
+        System.out.println(templateFile.canRead());
+        System.out.println(new File(template).getAbsolutePath());
+        System.out.println("The path is '" + templateFile + "'");
+
         System.out.println(template);
+
         // Load template
         try {
             existingDocument = Loader.loadPDF(new File(template));
+//            existingDocument = Loader.loadPDF((RandomAccessRead) templateFile);
 
 //            RandomAccessReadBufferedFile templateRAR = new RandomAccessReadBufferedFile(new File(template));
 //            existingDocument = Loader.loadPDF(template);
