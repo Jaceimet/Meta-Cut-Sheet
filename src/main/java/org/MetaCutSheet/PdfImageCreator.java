@@ -1,6 +1,5 @@
 package org.MetaCutSheet;
 
-import org.apache.commons.codec.Resources;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -13,7 +12,7 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -37,14 +36,19 @@ public class PdfImageCreator {
 
 //        InputStream templateFile = Resources.class.getResourceAsStream(template);
 //        InputStream input = PdfImageCreator.getClass().getResourceAsStream(template);
-        URL url = Resources.class.getResource("/org/MetaCutSheet/Template_Device.pdf");
-        System.out.println(url);
-        File templateFile = new File(template);
-        System.out.println(templateFile.exists());
-        System.out.println(templateFile.isDirectory());
-        System.out.println(templateFile.canRead());
+//        System.out.println("input stream: " + input);
+        InputStream url = FormSelector.class.getResourceAsStream("Template_Device.pdf");
+        System.out.println("URL: " + url);
+        File templateFile1 = new File("org/MetaCutSheet/Template_Device.pdf");
+        File templateFile2 = new File("src/main/java/org/MetaCutSheet/Template_Device.pdf");
+        File templateFile3 = new File("./Template_Device.pdf");
+        File templateFile4 = new File("C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\src\\main\\java\\org\\MetaCutSheet\\Template_Device.pdf");
+        File templateFile5 = new File(template);
+        System.out.println(templateFile3.exists());
+        System.out.println(templateFile3.isDirectory());
+        System.out.println(templateFile3.canRead());
         System.out.println(new File(template).getAbsolutePath());
-        System.out.println("The path is '" + templateFile + "'");
+        System.out.println("The path is '" + templateFile3 + "'");
 
         System.out.println(template);
 
