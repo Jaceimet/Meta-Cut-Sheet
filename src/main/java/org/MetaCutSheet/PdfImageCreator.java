@@ -39,15 +39,18 @@ public class PdfImageCreator {
 //        System.out.println("input stream: " + input);
         InputStream url = FormSelector.class.getResourceAsStream("Template_Device.pdf");
         System.out.println("URL: " + url);
+        File file = Paths.get(".", "resources", "Template_Device.pdf").normalize().toFile();
+        System.out.println("Paths: " + file );
+
         File templateFile1 = new File("org/MetaCutSheet/Template_Device.pdf");
         File templateFile2 = new File("src/main/java/org/MetaCutSheet/Template_Device.pdf");
-        File templateFile3 = new File("./Template_Device.pdf");
+        File templateFile3 = new File("Template_Device.pdf");
         File templateFile4 = new File("C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\src\\main\\java\\org\\MetaCutSheet\\Template_Device.pdf");
         File templateFile5 = new File(template);
         System.out.println(templateFile3.exists());
         System.out.println(templateFile3.isDirectory());
         System.out.println(templateFile3.canRead());
-        System.out.println(new File(template).getAbsolutePath());
+        System.out.println("Absolute path: " + new File(template).getAbsolutePath());
         System.out.println("The path is '" + templateFile3 + "'");
 
         System.out.println(template);
