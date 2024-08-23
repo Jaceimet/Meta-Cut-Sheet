@@ -91,8 +91,8 @@ public class FormSelector {
         } else {
 //                userSelection = "C:\\Computer Programming Projects\\Udemy\\Data Structures and Algorithms\\PDF_Express_2\\src\\main\\resources\\Template_Fixture.pdf";
 //                userSelection = "C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\src\\main\\resources\\Template_Fixture.pdf";
-//                  userSelection = "src/main/resources/Template_Fixture.pdf";
-                  userSelection = "Template_Fixture.pdf";
+                  userSelection = "src/main/resources/Template_Fixture.pdf";
+//                  userSelection = "Template_Fixture.pdf";
 //                userTemplateFile = new File( "src/main/Templates/Template_Fixture.pdf");
 //                userTemplateStream = FormSelector.class.getResourceAsStream("/src/main/Templates/Template_Fixture.pdf");
 //                try {
