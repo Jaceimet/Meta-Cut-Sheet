@@ -37,15 +37,15 @@ public class PdfImageCreator {
 //        InputStream templateFile = Resources.class.getResourceAsStream(template);
 //        InputStream input = PdfImageCreator.getClass().getResourceAsStream(template);
 //        System.out.println("input stream: " + input);
-        InputStream url = FormSelector.class.getResourceAsStream("Template_Device.pdf");
+        InputStream url = FormSelector.class.getResourceAsStream(template);
         System.out.println("URL: " + url);
-        File file = Paths.get(".", "resources", "Template_Device.pdf").normalize().toFile();
+        File file = Paths.get(".", "resources", template).normalize().toFile();
         System.out.println("Paths: " + file );
 
-        File templateFile1 = new File("org/MetaCutSheet/Template_Device.pdf");
-        File templateFile2 = new File("src/main/java/org/MetaCutSheet/Template_Device.pdf");
-        File templateFile3 = new File("Template_Device.pdf");
-        File templateFile4 = new File("C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\src\\main\\java\\org\\MetaCutSheet\\Template_Device.pdf");
+//        File templateFile1 = new File("org/MetaCutSheet/Template_Device.pdf");
+//        File templateFile2 = new File("src/main/java/org/MetaCutSheet/Template_Device.pdf");
+        File templateFile3 = new File(template);
+//        File templateFile4 = new File("C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\src\\main\\java\\org\\MetaCutSheet\\Template_Device.pdf");
         File templateFile5 = new File(template);
         System.out.println(templateFile3.exists());
         System.out.println(templateFile3.isDirectory());
@@ -58,7 +58,7 @@ public class PdfImageCreator {
         // Load template
         try {
             existingDocument = Loader.loadPDF(new File(template));
-//            existingDocument = Loader.loadPDF((RandomAccessRead) templateFile);
+//            existingDocument = Loader.loadPDF((RandomAccessRead) Resources.class.getClass().getClassLoader().getResources(template));
 
 //            RandomAccessReadBufferedFile templateRAR = new RandomAccessReadBufferedFile(new File(template));
 //            existingDocument = Loader.loadPDF(template);
@@ -78,7 +78,7 @@ public class PdfImageCreator {
         } catch (IOException e) {
             System.err.println("Error processing template: " + e.getMessage());
             ErrorMessages.templateCrash();
-            System.exit(0);
+            System.exit(1);
         }
 
         try {
