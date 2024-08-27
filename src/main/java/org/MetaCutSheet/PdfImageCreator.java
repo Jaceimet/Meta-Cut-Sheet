@@ -55,11 +55,22 @@ public class PdfImageCreator {
 
         System.out.println(template);
 
+        /////works only in IDE
+//        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+//
+//        File file2;
+//        try {
+//            file2 = new File(classLoader.getResource(template).toURI());
+//        } catch (URISyntaxException e) {
+//            throw new RuntimeException(e);
+//        }
+
         // Load template
         try {
             existingDocument = Loader.loadPDF(new File(template));
-//            existingDocument = Loader.loadPDF((RandomAccessRead) Resources.class.getClass().getClassLoader().getResources(template));
-
+//            existingDocument = Loader.loadPDF((RandomAccessRead) PdfImageCreator.class.getClass().getClassLoader().getResources(template));
+            // can not be cast to path error
+//            existingDocument = Loader.loadPDF(new RandomAccessReadBufferedFile((Path) PdfImageCreator.class.getResourceAsStream(template)));
 //            RandomAccessReadBufferedFile templateRAR = new RandomAccessReadBufferedFile(new File(template));
 //            existingDocument = Loader.loadPDF(template);
             temp_page = existingDocument.getPage(0);
