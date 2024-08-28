@@ -67,9 +67,9 @@ public class FormSelector {
 //            userSelection = "C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\Template_Device.pdf";
             /// non-functional
 //            userSelection = "org/MetaCutSheet/Template_Device.pdf";
-            userSelection = "/resources/Template_Device.pdf";
+//            userSelection = "src/resources/Template_Device.pdf";
 //            userSelection = "src/main/resources/Template_Device.pdf";
-//            userSelection = "resources/Template_Device.pdf";
+            userSelection = "/Template_Device.pdf";
 
 
 

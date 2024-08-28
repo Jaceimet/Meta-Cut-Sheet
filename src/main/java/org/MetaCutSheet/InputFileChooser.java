@@ -19,7 +19,7 @@ public class InputFileChooser {
         // need to figure out how to save last file path*********************
 
 ///////////////////////////// For Test Mode
-//        File testFile = new File("C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets");
+        File testFile = new File("C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets");
 /////////////////////////////
 
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF & Image Files", "pdf", "jpg", "png");
@@ -27,7 +27,7 @@ public class InputFileChooser {
         fileChooser.setDialogTitle("Choose File to Convert");
 
         ///////////////////////////// For Test Mode
-//        fileChooser.setCurrentDirectory(testFile);
+        fileChooser.setCurrentDirectory(testFile);
         ///////////////////////////////
 
         // Show the file chooser dialog

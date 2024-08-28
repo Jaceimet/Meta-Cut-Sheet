@@ -67,8 +67,9 @@ public class PdfImageCreator {
 
         // Load template
         try {
-            existingDocument = Loader.loadPDF(new File(template));
-//            existingDocument = Loader.loadPDF((RandomAccessRead) PdfImageCreator.class.getClass().getClassLoader().getResources(template));
+//            existingDocument = Loader.loadPDF(new File(template));
+            existingDocument = Loader.loadPDF(PdfImageCreator.class.getResourceAsStream(template).readAllBytes());
+//            existingDocument = Loader.loadPDF();
             // can not be cast to path error
 //            existingDocument = Loader.loadPDF(new RandomAccessReadBufferedFile((Path) PdfImageCreator.class.getResourceAsStream(template)));
 //            RandomAccessReadBufferedFile templateRAR = new RandomAccessReadBufferedFile(new File(template));
