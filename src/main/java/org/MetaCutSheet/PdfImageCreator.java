@@ -36,17 +36,14 @@ public class PdfImageCreator {
 
 //        InputStream templateFile = Resources.class.getResourceAsStream(template);
 //        InputStream input = PdfImageCreator.getClass().getResourceAsStream(template);
-//        System.out.println("input stream: " + input);
+//        System.out.println("input stream: " + templateFile);
         InputStream url = FormSelector.class.getResourceAsStream(template);
         System.out.println("URL: " + url);
         File file = Paths.get(".", "resources", template).normalize().toFile();
         System.out.println("Paths: " + file );
 
-//        File templateFile1 = new File("org/MetaCutSheet/Template_Device.pdf");
-//        File templateFile2 = new File("src/main/java/org/MetaCutSheet/Template_Device.pdf");
+
         File templateFile3 = new File(template);
-//        File templateFile4 = new File("C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\src\\main\\java\\org\\MetaCutSheet\\Template_Device.pdf");
-        File templateFile5 = new File(template);
         System.out.println(templateFile3.exists());
         System.out.println(templateFile3.isDirectory());
         System.out.println(templateFile3.canRead());
@@ -55,25 +52,14 @@ public class PdfImageCreator {
 
         System.out.println(template);
 
-        /////works only in IDE
-//        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-//
-//        File file2;
-//        try {
-//            file2 = new File(classLoader.getResource(template).toURI());
-//        } catch (URISyntaxException e) {
-//            throw new RuntimeException(e);
-//        }
-
         // Load template
         try {
+            //Functional only in IDE
 //            existingDocument = Loader.loadPDF(new File(template));
+
+            //Functional in IDE and JAR
             existingDocument = Loader.loadPDF(PdfImageCreator.class.getResourceAsStream(template).readAllBytes());
-//            existingDocument = Loader.loadPDF();
-            // can not be cast to path error
-//            existingDocument = Loader.loadPDF(new RandomAccessReadBufferedFile((Path) PdfImageCreator.class.getResourceAsStream(template)));
-//            RandomAccessReadBufferedFile templateRAR = new RandomAccessReadBufferedFile(new File(template));
-//            existingDocument = Loader.loadPDF(template);
+
             temp_page = existingDocument.getPage(0);
 
             //find template measurements
@@ -166,7 +152,7 @@ public class PdfImageCreator {
                     try {
 
                         //PDF processing
-
+                        ProcessingMessage.processingMessage();
                         // Load user file
                         PDDocument userDocument = Loader.loadPDF(new File(inputUserFile));
                         //convert user pdf to image
