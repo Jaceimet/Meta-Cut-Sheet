@@ -39,8 +39,8 @@ public class PdfImageCreator {
 //        System.out.println("input stream: " + templateFile);
         InputStream url = FormSelector.class.getResourceAsStream(template);
         System.out.println("URL: " + url);
-        File file = Paths.get(".", "resources", template).normalize().toFile();
-        System.out.println("Paths: " + file );
+//        File file = Paths.get(".", "resources", template).normalize().toFile();
+//        System.out.println("Paths: " + file );
 
 
         File templateFile3 = new File(template);
@@ -57,7 +57,7 @@ public class PdfImageCreator {
             //Functional only in IDE
 //            existingDocument = Loader.loadPDF(new File(template));
 
-            //Functional in IDE and JAR
+            //Functional in JAR
             existingDocument = Loader.loadPDF(PdfImageCreator.class.getResourceAsStream(template).readAllBytes());
 
             temp_page = existingDocument.getPage(0);
