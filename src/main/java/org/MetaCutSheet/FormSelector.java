@@ -8,10 +8,6 @@ public class FormSelector {
 
     static String userSelection;
 
-//    static File userTemplateFile;
-//    static RandomAccessReadBufferedFile userTemplateStream;
-//    static String devicePath = "src/main/resources/Template_Device.pdf";
-//    static String fixturePath = "src/main/resources/Template_Fixture.pdf";
 
     public static String displayForm() {
         // Create a frame
@@ -61,15 +57,12 @@ public class FormSelector {
 
         // Modify user return data
         if (userSelection == "Device Form") {
-//                userSelection = "C:\\Computer Programming Projects\\Udemy\\Data Structures and Algorithms\\PDF_Express_2\\src\\main\\resources\\Template_Device.pdf";
             ///Only Functional as local
 //            userSelection = "C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\src\\main\\resources\\Template_Device.pdf";
-//            userSelection = "C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\Template_Device.pdf";
+//            userSelection = "Template_Device.pdf";
             /// non-functional
 //            userSelection = "Template_Device.pdf";
-//            userSelection = "org/MetaCutSheet/Template_Device.pdf";
-//            userSelection = "src/resources/Template_Device.pdf";
-//            userSelection = "src/main/resources/Template_Device.pdf";
+
             //Only functional as jar
             userSelection = "/Template_Device.pdf";
 
@@ -93,18 +86,12 @@ public class FormSelector {
 //                        e.printStackTrace();}
 
         } else {
-//                userSelection = "C:\\Computer Programming Projects\\Udemy\\Data Structures and Algorithms\\PDF_Express_2\\src\\main\\resources\\Template_Fixture.pdf";
-//                userSelection = "C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\src\\main\\resources\\Template_Fixture.pdf";
-//                  userSelection = "src/main/resources/Template_Fixture.pdf";
-                  userSelection = "/Template_Fixture.pdf";
-//                userTemplateFile = new File( "src/main/Templates/Template_Fixture.pdf");
-//                userTemplateStream = FormSelector.class.getResourceAsStream("/src/main/Templates/Template_Fixture.pdf");
-//                try {
-//                    userTemplateStream = new RandomAccessReadBufferedFile("Template_Fixture.pdf");
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
+
+            //Only Functional as local
+            userSelection = "Template_Fixture.pdf";
+            //Only functional as jar
+//            userSelection = "/Template_Fixture.pdf";
+
 
 
             // Return the user's selection

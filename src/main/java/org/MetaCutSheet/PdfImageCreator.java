@@ -34,6 +34,7 @@ public class PdfImageCreator {
         float mediaBoxBottomLeftX = 9.95f;
         float mediaBoxBottomLeftY = 139f;
 
+//////////////////////Diagnostic print out
 //        InputStream templateFile = Resources.class.getResourceAsStream(template);
 //        InputStream input = PdfImageCreator.getClass().getResourceAsStream(template);
 //        System.out.println("input stream: " + templateFile);
@@ -41,23 +42,25 @@ public class PdfImageCreator {
         System.out.println("URL: " + url);
 //        File file = Paths.get(".", "resources", template).normalize().toFile();
 //        System.out.println("Paths: " + file );
-
-
         File templateFile3 = new File(template);
         System.out.println(templateFile3.exists());
         System.out.println(templateFile3.isDirectory());
         System.out.println(templateFile3.canRead());
         System.out.println("Absolute path: " + new File(template).getAbsolutePath());
         System.out.println("The path is '" + templateFile3 + "'");
-
         System.out.println(template);
+        System.out.println("current working dir. "+new File(".").getAbsolutePath());
+////////////////////////////////////
 
         // Load template
         try {
             //Functional only in IDE
 //            existingDocument = Loader.loadPDF(new File(template));
 
-            //Functional in JAR
+            //Functional only in JAR
+//            existingDocument = Loader.loadPDF(PdfImageCreator.class.getResourceAsStream(template).readAllBytes());
+
+            /////test/in-progress///works in local, need test jar
             existingDocument = Loader.loadPDF(PdfImageCreator.class.getResourceAsStream(template).readAllBytes());
 
             temp_page = existingDocument.getPage(0);
