@@ -19,13 +19,13 @@ import java.nio.file.Paths;
 
 public class PdfImageCreator {
 
-    public static PDDocument pdfGenerator(String template, String inputUserFile) {
+    public static PDDocument pdfGenerator(String template, String inputUserFile, File[] userFile) {
 
         PDDocument final_cs = new PDDocument();
         String type = null;
         PDPage temp_page = null;
         PDDocument existingDocument;
-        PDImageXObject pdImage2;
+        PDImageXObject pdImage2 = null;
 
 
         //media box dimensions
@@ -43,13 +43,13 @@ public class PdfImageCreator {
 //        File file = Paths.get(".", "resources", template).normalize().toFile();
 //        System.out.println("Paths: " + file );
         File templateFile3 = new File(template);
-        System.out.println(templateFile3.exists());
-        System.out.println(templateFile3.isDirectory());
-        System.out.println(templateFile3.canRead());
+        System.out.println("File Exits: "+templateFile3.exists());
+        System.out.println("Is Directory: "+templateFile3.isDirectory());
+        System.out.println("Can read file: "+templateFile3.canRead());
         System.out.println("Absolute path: " + new File(template).getAbsolutePath());
         System.out.println("The path is '" + templateFile3 + "'");
         System.out.println(template);
-        System.out.println("current working dir. "+new File(".").getAbsolutePath());
+        System.out.println("current working dir. "+ new File(".").getAbsolutePath());
 ////////////////////////////////////
 
         // Load template
@@ -57,10 +57,7 @@ public class PdfImageCreator {
             //Functional only in IDE
 //            existingDocument = Loader.loadPDF(new File(template));
 
-            //Functional only in JAR
-//            existingDocument = Loader.loadPDF(PdfImageCreator.class.getResourceAsStream(template).readAllBytes());
-
-            /////test/in-progress///works in local, need test jar
+            //Functional only in JAR and IDE
             existingDocument = Loader.loadPDF(PdfImageCreator.class.getResourceAsStream(template).readAllBytes());
 
             temp_page = existingDocument.getPage(0);
@@ -97,52 +94,95 @@ public class PdfImageCreator {
 
                 System.out.println("File is an " + type + " type\n");
 
-                final_cs.addPage(temp_page);
+////////////////////////////
+                //For Single file
+//                final_cs.addPage(temp_page);
+//                pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
+//                assert temp_page != null;
+//                PDPageContentStream contentStream = new PDPageContentStream(final_cs, temp_page,
+//                        PDPageContentStream.AppendMode.APPEND, false);
+//
+//                boolean isLandscape = pdImage2.getHeight() < pdImage2.getWidth();
 
-                pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
+//                if (isLandscape) {
+//                    System.out.println("image is in landscape orientation" + "\n");
+//
+//
+//                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+//                            mediaBoxBottomLeftY, pdImage2);
+//
+//                    contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
+//                            imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+//
+//                    contentStream.close();
+//
+//                } else {
+//                    System.out.println("image is in portrait orientation" + "\n");
+//
+//                    // non-functional stretch to media box (optional implementation)
+////                    contentStream.drawImage(pdImage2, 9.95f, 139f, scaledWidth2, scaledHeight2);
+//
+//                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+//                            mediaBoxBottomLeftY, pdImage2);
+//
+//                    contentStream.drawImage(pdImage2, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
+//                            imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+//
+//                    contentStream.close();
+//
+//                }
+
+                //Loop for Multiple files
+                PDPageContentStream contentStream = null;
+                boolean isLandscape = false;
+                for (int i = userFile.length -1; i >= 0; i--) {
+                    System.out.println(userFile[i]);
+                    final_cs.addPage(temp_page);
+                    pdImage2 = PDImageXObject.createFromFileByContent(userFile[i], final_cs);
+                    assert temp_page != null;
+                    contentStream = new PDPageContentStream(final_cs, temp_page,
+                            PDPageContentStream.AppendMode.APPEND, false);
+
+                    isLandscape = pdImage2.getHeight() < pdImage2.getWidth();
+
+                    if (isLandscape) {
+                        System.out.println("image is in landscape orientation" + "\n");
 
 
-                // non-functional scale stretch to media box (optional calculation)
+                        ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+                                mediaBoxBottomLeftY, pdImage2);
+
+                        contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
+                                imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+
+                        contentStream.close();
+
+                    } else {
+                        System.out.println("image is in portrait orientation" + "\n");
+
+                        // non-functional stretch to media box (optional implementation)
+//                    contentStream.drawImage(pdImage2, 9.95f, 139f, scaledWidth2, scaledHeight2);
+
+                        ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+                                mediaBoxBottomLeftY, pdImage2);
+
+                        contentStream.drawImage(pdImage2, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
+                                imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+
+                        contentStream.close();
+
+                    }
+
+                 }
+
+
+//////////////////////////////////
+//                non-functional scale stretch to media box (optional calculation)
 //                float scaledWidth2 = imageWidth / scaledWidth;
 //                System.out.println("scaledWidth2 "+scaledWidth2);
 //                float scaledHeight2 = imageHeight / scaledHeight;
 //                System.out.println("scaledHeight2 "+scaledHeight2);
-
-
-                assert temp_page != null;
-                PDPageContentStream contentStream = new PDPageContentStream(final_cs, temp_page,
-                        PDPageContentStream.AppendMode.APPEND, false);
-
-
-                boolean isLandscape = pdImage2.getHeight() < pdImage2.getWidth();
-
-
-                if (isLandscape) {
-                    System.out.println("image is in landscape orientation" + "\n");
-
-                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
-                            mediaBoxBottomLeftY, pdImage2);
-
-                    contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
-                            imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
-
-                    contentStream.close();
-
-                } else {
-                    System.out.println("image is in portrait orientation" + "\n");
-
-                    // non-functional stretch to media box (optional implementation)
-//                    contentStream.drawImage(pdImage2, 9.95f, 139f, scaledWidth2, scaledHeight2);
-
-                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
-                            mediaBoxBottomLeftY, pdImage2);
-
-                    contentStream.drawImage(pdImage2, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
-                            imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
-
-                    contentStream.close();
-
-                }
+/////////////////////////////
 
 
             } else {

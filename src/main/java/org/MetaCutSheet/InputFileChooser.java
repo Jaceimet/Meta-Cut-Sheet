@@ -61,8 +61,8 @@ public class InputFileChooser {
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Choose multiple files to Convert");
 
-//        File testFile = new File("C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets");
-//        chooser.setCurrentDirectory(testFile);
+        File testFile = new File("C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets");
+        chooser.setCurrentDirectory(testFile);
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "png");
         chooser.setFileFilter(filter);
         chooser.setMultiSelectionEnabled(true);

@@ -2,6 +2,7 @@ package org.MetaCutSheet;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 
+import java.io.File;
 import java.io.IOException;
 
 /* Notes: code needs to be cleaned
@@ -24,25 +25,25 @@ public class Main {
 
         String template = FormSelector.displayForm();
 
-        String inputUserFile = InputFileChooser.userFile();
+//        String inputUserFile = InputFileChooser.userFile();
 
-//        File[] userFile = InputFileChooser.multipleFileUserInput();
-//
+        File[] userFile = InputFileChooser.multipleFileUserInput();
+
 //        for (int i = userFile.length -1; i >= 0; i--) {
 //            System.out.println(userFile[i]);
-//        }
+//                    }
 //        System.exit(0);
 
         /* Code is funtional but lacks complexity needed
          * https://stackoverflow.com/questions/23326562/convert-pdf-files-to-images-with-pdfbox
          * */
 
-        PDDocument final_cs = PdfImageCreator.pdfGenerator(template, inputUserFile);
-
+        PDDocument final_cs = PdfImageCreator.pdfGenerator(template, inputUserFile, userFile);
+//
         String selectedSaveFilePath = SaveFinalPDF.saveFinalPDF(final_cs);
-
+//
         final_cs.close();
-
+//
         OpenFinalPDF.openPDF(selectedSaveFilePath);
 
 
