@@ -382,12 +382,65 @@ public class PdfImageCreator {
 //
 //                }
 
+////////////////////////////original loop for reference
+//                int i;
+//                        for (i = 0; i < userDocument.getNumberOfPages(); ++i) {
+//                            final_cs.importPage(temp_page);
+//                        }
+//                        System.out.println("final_Cs has " + i + " pages" + "\n");
+//
+//                        for (i = 0; i < userDocument.getNumberOfPages(); ++i) {
+//                            //check for orientation
+//                            PDRectangle pageSize = userDocument.getPage(i).getMediaBox();
+//                            int degree = userDocument.getPage(i).getRotation();
+//                            boolean isLandscape;
+//                            isLandscape = (pageSize.getWidth() > pageSize.getHeight()) || (degree == 90) || (degree == 270);
+//
+//                            try (PDPageContentStream contentStream = new PDPageContentStream(userDocument, final_cs.getPage(i),
+//                                    PDPageContentStream.AppendMode.APPEND, false)) {
+//                                BufferedImage image = pdfRenderer.renderImageWithDPI(i, 300.0F);
+//                                PDImageXObject pdImage = LosslessFactory.createFromImage(userDocument, image);
+//
+//                                if (isLandscape) {
+//
+//                                    System.out.println("Landscape" + "\n");
+//
+//                                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+//                                            mediaBoxBottomLeftY, pdImage);
+//
+//                                    contentStream.drawImage(pdImage, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
+//                                            imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+//
+//                                } else {
+//
+//                                    System.out.println("Portrait" + "\n");
+//
+//                                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+//                                            mediaBoxBottomLeftY, pdImage);
+//
+//                                    contentStream.drawImage(pdImage, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
+//                                            imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+//
+//                                }
+//
+//                            }
+//
+//                        }
+//////////////////////////////////////////////////////
+
                 //Loop for Multiple files *** needs second loop to add additional pages/images
                 PDPageContentStream contentStream = null;
                 boolean isLandscape = false;
-                for (int i = userFile.length - 1; i >= 0; i--) {
+
+                System.out.println("Array has "+userFile.length+" pages");
+
+                for (int i = 0; i < userFile.length; ++i) {
+                    final_cs.importPage(temp_page);
+                }
+
+                for (int i = userFile.length-1; i >= 0; i--) {
                     System.out.println(userFile[i]);
-                    final_cs.addPage(temp_page);
+//                    final_cs.addPage(temp_page);
                     pdImage2 = PDImageXObject.createFromFileByContent(userFile[i], final_cs);
                     assert temp_page != null;
                     contentStream = new PDPageContentStream(final_cs, temp_page,
