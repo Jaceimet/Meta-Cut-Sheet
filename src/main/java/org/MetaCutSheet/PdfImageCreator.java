@@ -19,13 +19,15 @@ import java.nio.file.Paths;
 
 public class PdfImageCreator {
 
-    public static PDDocument pdfGenerator(String template, String inputUserFile, File[] userFile) {
+    public static PDDocument pdfGenerator(String template, String inputUserFile) {
+
+        //PDF Processing
 
         PDDocument final_cs = new PDDocument();
         String type = null;
         PDPage temp_page = null;
         PDDocument existingDocument;
-        PDImageXObject pdImage2 = null;
+//        PDImageXObject pdImage2 = null;
 
 
         //media box dimensions
@@ -43,13 +45,13 @@ public class PdfImageCreator {
 //        File file = Paths.get(".", "resources", template).normalize().toFile();
 //        System.out.println("Paths: " + file );
         File templateFile3 = new File(template);
-        System.out.println("File Exits: "+templateFile3.exists());
-        System.out.println("Is Directory: "+templateFile3.isDirectory());
-        System.out.println("Can read file: "+templateFile3.canRead());
+        System.out.println("File Exits: " + templateFile3.exists());
+        System.out.println("Is Directory: " + templateFile3.isDirectory());
+        System.out.println("Can read file: " + templateFile3.canRead());
         System.out.println("Absolute path: " + new File(template).getAbsolutePath());
         System.out.println("The path is '" + templateFile3 + "'");
         System.out.println(template);
-        System.out.println("current working dir. "+ new File(".").getAbsolutePath());
+        System.out.println("current working dir. " + new File(".").getAbsolutePath());
 ////////////////////////////////////
 
         // Load template
@@ -83,109 +85,110 @@ public class PdfImageCreator {
             type = Files.probeContentType(Paths.get(inputUserFile));
         } catch (IOException e) {
             System.err.println("Error processing inputUserFile type: " + e.getMessage());
-
         }
 
-        try {
-
-            //image handling, needs refining
-
-            if (type != null && type.equals("image/png") || type != null && type.equals("image/jpeg")) {
-
-                System.out.println("File is an " + type + " type\n");
-
-////////////////////////////
-                //For Single file
-//                final_cs.addPage(temp_page);
-//                pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
-//                assert temp_page != null;
-//                PDPageContentStream contentStream = new PDPageContentStream(final_cs, temp_page,
-//                        PDPageContentStream.AppendMode.APPEND, false);
+//        try {
 //
-//                boolean isLandscape = pdImage2.getHeight() < pdImage2.getWidth();
-
-//                if (isLandscape) {
-//                    System.out.println("image is in landscape orientation" + "\n");
+//            //image handling, needs refining
+//
+//            if (type != null && type.equals("image/png") || type != null && type.equals("image/jpeg")) {
+//
+//                System.out.println("File is an " + type + " type\n");
+//
+//                ProcessingMessage.processingMessage();
+//
+//////////////////////////////
+//                //For Single file
+////                final_cs.addPage(temp_page);
+////                pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
+////                assert temp_page != null;
+////                PDPageContentStream contentStream = new PDPageContentStream(final_cs, temp_page,
+////                        PDPageContentStream.AppendMode.APPEND, false);
+////
+////                boolean isLandscape = pdImage2.getHeight() < pdImage2.getWidth();
+//
+////                if (isLandscape) {
+////                    System.out.println("image is in landscape orientation" + "\n");
+////
+////
+////                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+////                            mediaBoxBottomLeftY, pdImage2);
+////
+////                    contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
+////                            imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+////
+////                    contentStream.close();
+////
+////                } else {
+////                    System.out.println("image is in portrait orientation" + "\n");
+////
+////                    // non-functional stretch to media box (optional implementation)
+//////                    contentStream.drawImage(pdImage2, 9.95f, 139f, scaledWidth2, scaledHeight2);
+////
+////                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+////                            mediaBoxBottomLeftY, pdImage2);
+////
+////                    contentStream.drawImage(pdImage2, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
+////                            imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+////
+////                    contentStream.close();
+////
+////                }
+//
+//                //Loop for Multiple files
+//                PDPageContentStream contentStream = null;
+//                boolean isLandscape = false;
+//                for (int i = userFile.length - 1; i >= 0; i--) {
+//                    System.out.println(userFile[i]);
+//                    final_cs.addPage(temp_page);
+//                    pdImage2 = PDImageXObject.createFromFileByContent(userFile[i], final_cs);
+//                    assert temp_page != null;
+//                    contentStream = new PDPageContentStream(final_cs, temp_page,
+//                            PDPageContentStream.AppendMode.APPEND, false);
+//
+//                    isLandscape = pdImage2.getHeight() < pdImage2.getWidth();
+//
+//                    if (isLandscape) {
+//                        System.out.println("image is in landscape orientation" + "\n");
 //
 //
-//                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
-//                            mediaBoxBottomLeftY, pdImage2);
+//                        ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+//                                mediaBoxBottomLeftY, pdImage2);
 //
-//                    contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
-//                            imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+//                        contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
+//                                imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
 //
-//                    contentStream.close();
+//                        contentStream.close();
 //
-//                } else {
-//                    System.out.println("image is in portrait orientation" + "\n");
+//                    } else {
+//                        System.out.println("image is in portrait orientation" + "\n");
 //
-//                    // non-functional stretch to media box (optional implementation)
+//                        // non-functional stretch to media box (optional implementation)
 ////                    contentStream.drawImage(pdImage2, 9.95f, 139f, scaledWidth2, scaledHeight2);
 //
-//                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
-//                            mediaBoxBottomLeftY, pdImage2);
+//                        ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+//                                mediaBoxBottomLeftY, pdImage2);
 //
-//                    contentStream.drawImage(pdImage2, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
-//                            imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+//                        contentStream.drawImage(pdImage2, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
+//                                imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
 //
-//                    contentStream.close();
+//                        contentStream.close();
+//
+//                    }
 //
 //                }
-
-                //Loop for Multiple files
-                PDPageContentStream contentStream = null;
-                boolean isLandscape = false;
-                for (int i = userFile.length -1; i >= 0; i--) {
-                    System.out.println(userFile[i]);
-                    final_cs.addPage(temp_page);
-                    pdImage2 = PDImageXObject.createFromFileByContent(userFile[i], final_cs);
-                    assert temp_page != null;
-                    contentStream = new PDPageContentStream(final_cs, temp_page,
-                            PDPageContentStream.AppendMode.APPEND, false);
-
-                    isLandscape = pdImage2.getHeight() < pdImage2.getWidth();
-
-                    if (isLandscape) {
-                        System.out.println("image is in landscape orientation" + "\n");
-
-
-                        ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
-                                mediaBoxBottomLeftY, pdImage2);
-
-                        contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
-                                imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
-
-                        contentStream.close();
-
-                    } else {
-                        System.out.println("image is in portrait orientation" + "\n");
-
-                        // non-functional stretch to media box (optional implementation)
-//                    contentStream.drawImage(pdImage2, 9.95f, 139f, scaledWidth2, scaledHeight2);
-
-                        ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
-                                mediaBoxBottomLeftY, pdImage2);
-
-                        contentStream.drawImage(pdImage2, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
-                                imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
-
-                        contentStream.close();
-
-                    }
-
-                 }
-
-
-//////////////////////////////////
-//                non-functional scale stretch to media box (optional calculation)
-//                float scaledWidth2 = imageWidth / scaledWidth;
-//                System.out.println("scaledWidth2 "+scaledWidth2);
-//                float scaledHeight2 = imageHeight / scaledHeight;
-//                System.out.println("scaledHeight2 "+scaledHeight2);
-/////////////////////////////
-
-
-            } else {
+//
+//
+////////////////////////////////////
+////                non-functional scale stretch to media box (optional calculation)
+////                float scaledWidth2 = imageWidth / scaledWidth;
+////                System.out.println("scaledWidth2 "+scaledWidth2);
+////                float scaledHeight2 = imageHeight / scaledHeight;
+////                System.out.println("scaledHeight2 "+scaledHeight2);
+///////////////////////////////
+//
+//
+//            } else {
                 assert type != null;
                 if (type.equals("application/pdf")) {
 
@@ -255,20 +258,180 @@ public class PdfImageCreator {
                         System.err.println("Error processing PDFs: " + e.getMessage());
                     }
                 }
+                return final_cs;
             }
 
-//            } else
-//                System.out.println("Not a supported file type");
-//                JFrame frame = new JFrame("Error");
-//                JOptionPane.showMessageDialog(frame, "Not a supported file type, App shutting down...");
-//                frame.dispose();
-//                System.exit(1);
 
-        } catch (Exception e) {
-            System.err.println("Not a supported file type: " + e.getMessage());
+//        } catch (Exception e) {
+//            System.err.println("Not a supported file type: " + e.getMessage());
+//        }
+//
+//        return final_cs;
+//
+//    }
+
+    public static PDDocument pdfGenerator(String template, File[] userFile) {
+
+        //Image Processing
+
+        PDDocument final_cs = new PDDocument();
+        String type = null;
+        PDPage temp_page = null;
+        PDDocument existingDocument;
+        PDImageXObject pdImage2 = null;
+
+
+        //media box dimensions
+        float mediaBoxWidth = 593F; //638.0F
+        float mediaBoxHeight = 642f; //644f, 641.48f, 638.6f
+        float mediaBoxBottomLeftX = 9.95f;
+        float mediaBoxBottomLeftY = 139f;
+
+//////////////////////Diagnostic print out
+//        InputStream templateFile = Resources.class.getResourceAsStream(template);
+//        InputStream input = PdfImageCreator.getClass().getResourceAsStream(template);
+//        System.out.println("input stream: " + templateFile);
+        InputStream url = FormSelector.class.getResourceAsStream(template);
+        System.out.println("URL: " + url);
+//        File file = Paths.get(".", "resources", template).normalize().toFile();
+//        System.out.println("Paths: " + file );
+        File templateFile3 = new File(template);
+        System.out.println("File Exits: " + templateFile3.exists());
+        System.out.println("Is Directory: " + templateFile3.isDirectory());
+        System.out.println("Can read file: " + templateFile3.canRead());
+        System.out.println("Absolute path: " + new File(template).getAbsolutePath());
+        System.out.println("The path is '" + templateFile3 + "'");
+        System.out.println(template);
+        System.out.println("current working dir. " + new File(".").getAbsolutePath());
+////////////////////////////////////
+
+        // Load template
+        try {
+            //Functional only in IDE
+//            existingDocument = Loader.loadPDF(new File(template));
+
+            //Functional only in JAR and IDE
+            existingDocument = Loader.loadPDF(PdfImageCreator.class.getResourceAsStream(template).readAllBytes());
+
+            temp_page = existingDocument.getPage(0);
+
+            //find template measurements
+            PDRectangle pageSize = existingDocument.getPage(0).getMediaBox();
+            float existingPageWidth = pageSize.getWidth();
+            System.out.println("existingPageWidth " + existingPageWidth + "\n");
+            float existingPageHeight = pageSize.getHeight();
+            System.out.println("existingPageHeight " + existingPageHeight + "\n");
+
+        } catch (IOException e) {
+            System.err.println("Error processing template: " + e.getMessage());
+            ErrorMessages.templateCrash();
+            System.exit(1);
         }
 
-        return final_cs;
+        try {
+            type = Files.probeContentType(Paths.get(String.valueOf(userFile[0])));
+        } catch (IOException e) {
+            System.err.println("Error processing inputUserFile type: " + e.getMessage());
+        }
 
+        try {
+
+            //image handling, needs refining
+
+            if (type != null && type.equals("image/png") || type != null && type.equals("image/jpeg")) {
+
+                System.out.println("File is an " + type + " type\n");
+
+                ProcessingMessage.processingMessage();
+
+////////////////////////////
+                //For Single file
+//                final_cs.addPage(temp_page);
+//                pdImage2 = PDImageXObject.createFromFile(inputUserFile, final_cs);
+//                assert temp_page != null;
+//                PDPageContentStream contentStream = new PDPageContentStream(final_cs, temp_page,
+//                        PDPageContentStream.AppendMode.APPEND, false);
+//
+//                boolean isLandscape = pdImage2.getHeight() < pdImage2.getWidth();
+
+//                if (isLandscape) {
+//                    System.out.println("image is in landscape orientation" + "\n");
+//
+//
+//                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+//                            mediaBoxBottomLeftY, pdImage2);
+//
+//                    contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
+//                            imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+//
+//                    contentStream.close();
+//
+//                } else {
+//                    System.out.println("image is in portrait orientation" + "\n");
+//
+//                    // non-functional stretch to media box (optional implementation)
+////                    contentStream.drawImage(pdImage2, 9.95f, 139f, scaledWidth2, scaledHeight2);
+//
+//                    ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+//                            mediaBoxBottomLeftY, pdImage2);
+//
+//                    contentStream.drawImage(pdImage2, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
+//                            imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+//
+//                    contentStream.close();
+//
+//                }
+
+                //Loop for Multiple files *** needs second loop to add additional pages/images
+                PDPageContentStream contentStream = null;
+                boolean isLandscape = false;
+                for (int i = userFile.length - 1; i >= 0; i--) {
+                    System.out.println(userFile[i]);
+                    final_cs.addPage(temp_page);
+                    pdImage2 = PDImageXObject.createFromFileByContent(userFile[i], final_cs);
+                    assert temp_page != null;
+                    contentStream = new PDPageContentStream(final_cs, temp_page,
+                            PDPageContentStream.AppendMode.APPEND, false);
+
+                    isLandscape = pdImage2.getHeight() < pdImage2.getWidth();
+
+                    if (isLandscape) {
+                        System.out.println("image is in landscape orientation" + "\n");
+
+
+                        ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+                                mediaBoxBottomLeftY, pdImage2);
+
+                        contentStream.drawImage(pdImage2, mediaBoxBottomLeftX, imageScalar.getAdjustedY(),
+                                imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+
+                        contentStream.close();
+
+                    } else {
+                        System.out.println("image is in portrait orientation" + "\n");
+
+                        // non-functional stretch to media box (optional implementation)
+//                    contentStream.drawImage(pdImage2, 9.95f, 139f, scaledWidth2, scaledHeight2);
+
+                        ImageScalar imageScalar = new ImageScalar(mediaBoxWidth, mediaBoxHeight, mediaBoxBottomLeftX,
+                                mediaBoxBottomLeftY, pdImage2);
+
+                        contentStream.drawImage(pdImage2, imageScalar.getAdjustedX(), mediaBoxBottomLeftY,
+                                imageScalar.getScaledWidth(), imageScalar.getScaledHeight());
+
+                        contentStream.close();
+
+                    }
+
+                }
+
+
+
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return final_cs;
     }
 }

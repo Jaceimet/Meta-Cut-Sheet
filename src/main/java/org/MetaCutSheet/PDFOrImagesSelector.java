@@ -4,22 +4,22 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class FormSelector {
+public class PDFOrImagesSelector {
 
     static String userSelection;
 
 
-    public static String displayForm() {
+    public static String displayPDFOrImageForm() {
         // Create a frame
-        JFrame frame = new JFrame("Select Form");
+        JFrame frame = new JFrame("Choose to Process PDF or Image(s)");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 75);
+        frame.setSize(400, 75);
         frame.setLocationRelativeTo(null);
 
 
         // Create buttons
-        JButton deviceButton = new JButton("Device Form");
-        JButton fixtureButton = new JButton("Fixture Form");
+        JButton deviceButton = new JButton("PDF");
+        JButton fixtureButton = new JButton("Image(s)");
 
         // Create a panel to hold the buttons
         JPanel panel = new JPanel();
@@ -29,14 +29,14 @@ public class FormSelector {
         // Add action listeners to buttons
         deviceButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                userSelection = "Device Form";
+                userSelection = "PDF";
                 frame.dispose(); // Close the frame
             }
         });
 
         fixtureButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                userSelection = "Fixture Form";
+                userSelection = "Image(s)";
                 frame.dispose(); // Close the frame
             }
         });
@@ -54,28 +54,7 @@ public class FormSelector {
                 e.printStackTrace();
             }
         }
-
-        // Modify user return data
-        if (userSelection == "Device Form") {
-            ///Only Functional as local
-//            userSelection = "C:\\Computer Programming Projects\\GitHub\\Meta-Cut-Sheet\\Meta-Cut-Sheet\\src\\main\\resources\\Template_Device.pdf";
-//            userSelection = "Template_Device.pdf";
-
-            //Only functional as jar
-            userSelection = "/Template_Device.pdf";
-
-
-        } else {
-
-            //Only Functional as local
-            userSelection = "/Template_Fixture.pdf";
-            //Only functional as jar
-//            userSelection = "/Template_Fixture.pdf";
-
-        }
-
-        System.out.println("Template chosen: " + userSelection);
-        return userSelection;
+       return userSelection;
     }
 
 

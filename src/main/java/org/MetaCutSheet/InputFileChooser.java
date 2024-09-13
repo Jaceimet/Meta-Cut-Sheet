@@ -8,9 +8,7 @@ import java.io.IOException;
 public class InputFileChooser {
 
 
-
-
-    static String userFile() {
+    static String userPDFFileInput() {
 
         // Create a file chooser
         JFileChooser fileChooser = new JFileChooser();
@@ -22,7 +20,7 @@ public class InputFileChooser {
         File testFile = new File("C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets");
 /////////////////////////////
 
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF & Image Files", "pdf", "jpg", "png");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF Files", "pdf");
         fileChooser.setFileFilter(filter);
         fileChooser.setDialogTitle("Choose File to Convert");
 
@@ -53,13 +51,13 @@ public class InputFileChooser {
 
 
 
-    public static File[] multipleFileUserInput() throws IOException {
+    public static File[] multipleImageFileUserInput() throws IOException {
 
         // need to add muti-file option for images
 
         JFrame frame = new JFrame();
         JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Choose multiple files to Convert");
+        chooser.setDialogTitle("Choose file(s) to Convert");
 
         File testFile = new File("C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets");
         chooser.setCurrentDirectory(testFile);
