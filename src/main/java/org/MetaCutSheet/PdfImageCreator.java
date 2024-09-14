@@ -343,6 +343,7 @@ public class PdfImageCreator {
                 System.out.println("File is an " + type + " type\n");
 
                 ProcessingMessage.processingMessage();
+                
 
 ////////////////////////////
                 //For Single file
@@ -381,7 +382,7 @@ public class PdfImageCreator {
 //                    contentStream.close();
 //
 //                }
-                
+
 
                 System.out.println("User selected " + userFile.length + " images\n");
 
