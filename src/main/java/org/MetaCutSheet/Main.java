@@ -64,6 +64,7 @@ public class Main {
 
         OpenFinalPDF.openPDF(selectedSaveFilePath);
 
+        System.exit(0);
 
     }
 
