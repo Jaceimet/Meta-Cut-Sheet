@@ -6,8 +6,14 @@ import java.io.File;
 import java.io.IOException;
 
 public class InputFileChooser {
-    
+
+//    Customer requests easier access to onedrive, need to save file preference for future use?
+//    https://www.youtube.com/watch?v=6y5vzp2qYik  (posible solution with mods)
+//    https://www.youtube.com/watch?v=1GeVbi1uj_8
+
     static String userPDFFileInput() {
+
+
 
         try {
             for (UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -61,6 +67,15 @@ public class InputFileChooser {
 
     public static File[] multipleImageFileUserInput() throws IOException {
 
+        try {
+            for (UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         // need to add muti-file option for images
 
         JFrame frame = new JFrame();
@@ -75,12 +90,8 @@ public class InputFileChooser {
         chooser.showOpenDialog(frame);
 
 
-
-        File[] files = chooser.getSelectedFiles();
-
-
-            //////////////////////
-        return files;
+        //////////////////////
+        return chooser.getSelectedFiles();
         }
 
 
