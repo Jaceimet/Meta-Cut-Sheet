@@ -6,9 +6,17 @@ import java.io.File;
 import java.io.IOException;
 
 public class InputFileChooser {
-
-
+    
     static String userPDFFileInput() {
+
+        try {
+            for (UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         // Create a file chooser
         JFileChooser fileChooser = new JFileChooser();
