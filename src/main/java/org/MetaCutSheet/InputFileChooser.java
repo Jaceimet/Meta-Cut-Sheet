@@ -1,5 +1,7 @@
 package org.MetaCutSheet;
 
+import javafx.stage.FileChooser;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
@@ -13,19 +15,44 @@ public class InputFileChooser {
 
     static String userPDFFileInput() {
 
+        //attempt to use javafx filechooser (failed)
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Text Files", "*.txt"),
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
+                new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"),
+                new FileChooser.ExtensionFilter("All Files", "*.*"));
+        File selectedFile = fileChooser.showOpenDialog(null);
+//        if (selectedFile != null) {
+//            mainStage.display(selectedFile);
+//        }
+
+        // repository added possible solution to customer request. has issue with opening file 3 deep
+//        JnaFileChooser fc = new JnaFileChooser();
+//        fc.addFilter("PDF Files", "pdf");
+//        String testFile2 = "C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets";
+//        fc.setCurrentDirectory(testFile2);
+//
+//        if (fc.showOpenDialog(null)) {
+//            File f = fc.getSelectedFile();
+//            // do something with f
+//        }
 
 
-        try {
-            for (UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            }
+        // using jchooser/swing styling
+//        try {
+//            for (UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+//            }
+//
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
 
         // Create a file chooser
-        JFileChooser fileChooser = new JFileChooser();
+        JFileChooser jFileChooser = new JFileChooser();
 
         // Optionally, set the file chooser to select only files with a specific extension
         // need to figure out how to save last file path*********************
@@ -35,15 +62,15 @@ public class InputFileChooser {
 /////////////////////////////
 
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF Files", "pdf");
-        fileChooser.setFileFilter(filter);
-        fileChooser.setDialogTitle("Choose File to Convert");
+        jFileChooser.setFileFilter(filter);
+        jFileChooser.setDialogTitle("Choose File to Convert");
 
         ///////////////////////////// For Test Mode
-        fileChooser.setCurrentDirectory(testFile);
+        jFileChooser.setCurrentDirectory(testFile);
         ///////////////////////////////
 
         // Show the file chooser dialog
-        int result = fileChooser.showOpenDialog(null);
+        int result = jFileChooser.showOpenDialog(null);
 
         //Get file path from user
         String selectedFilePath = null;
@@ -51,7 +78,7 @@ public class InputFileChooser {
         if (result == JFileChooser.APPROVE_OPTION) {
 
             // Get the selected file
-            java.io.File file = fileChooser.getSelectedFile();
+            File file = jFileChooser.getSelectedFile();
             selectedFilePath = file.getAbsolutePath();
 
             System.out.println("\n" + "Selected input file: " + file.getAbsolutePath() + "\n");
