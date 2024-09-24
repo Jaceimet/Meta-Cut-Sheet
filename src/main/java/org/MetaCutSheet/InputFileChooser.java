@@ -1,5 +1,6 @@
 package org.MetaCutSheet;
 
+import javafx.application.Platform;
 import javafx.stage.FileChooser;
 
 import javax.swing.*;
@@ -15,17 +16,44 @@ public class InputFileChooser {
 
     static String userPDFFileInput() {
 
-        //attempt to use javafx filechooser (failed)
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Text Files", "*.txt"),
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
-                new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"),
-                new FileChooser.ExtensionFilter("All Files", "*.*"));
-        File selectedFile = fileChooser.showOpenDialog(null);
-//        if (selectedFile != null) {
-//            mainStage.display(selectedFile);
+
+        //successful, needs refinement
+        Platform.startup(() ->
+        {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            fileChooser.getExtensionFilters().
+
+                    addAll(
+                            new FileChooser.ExtensionFilter("Text Files", "*.txt"),
+                            new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
+//                    new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"),
+                            new FileChooser.ExtensionFilter("All Files", "*.*"));
+            File selectedFile = fileChooser.showOpenDialog(null);
+
+        });
+
+//            Platform.runLater(new Runnable() {
+//                @Override
+//                public void run() {
+//                    //attempt to use javafx filechooser (failed)
+//                    FileChooser fileChooser = new FileChooser();
+//                    fileChooser.setTitle("Open Resource File");
+//                    fileChooser.getExtensionFilters().
+//
+//                            addAll(
+//                                    new FileChooser.ExtensionFilter("Text Files", "*.txt"),
+//                                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
+////                    new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"),
+//                                    new FileChooser.ExtensionFilter("All Files", "*.*"));
+//                    File selectedFile = fileChooser.showOpenDialog(null);
+////            if (selectedFile != null) {
+//////                mainStage.display(selectedFile);
+////            }
+//                }
+//            });
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
 //        }
 
         // repository added possible solution to customer request. has issue with opening file 3 deep
