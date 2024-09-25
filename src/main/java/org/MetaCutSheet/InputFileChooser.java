@@ -1,6 +1,5 @@
 package org.MetaCutSheet;
 
-import javafx.application.Platform;
 import javafx.stage.FileChooser;
 
 import javax.swing.*;
@@ -16,22 +15,26 @@ public class InputFileChooser {
 
     static String userPDFFileInput() {
 
+        /// failure due to multi-thread attept or can not return result in lambda form...
 
-        //successful, needs refinement
-        Platform.startup(() ->
-        {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open Resource File");
-            fileChooser.getExtensionFilters().
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        fileChooser.getExtensionFilters().
 
-                    addAll(
-                            new FileChooser.ExtensionFilter("Text Files", "*.txt"),
-                            new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
-//                    new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"),
-                            new FileChooser.ExtensionFilter("All Files", "*.*"));
-            File selectedFile = fileChooser.showOpenDialog(null);
+                addAll(
+                        new FileChooser.ExtensionFilter("PDF", "*.pdf"),
+                        new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
+                        new FileChooser.ExtensionFilter("All Files", "*.*"));
+        File file = fileChooser.showOpenDialog(null);
 
-        });
+        final String selectedFilePath = file.getAbsolutePath();
+
+        return selectedFilePath;
+
+
+    }
+
+
 
 //            Platform.runLater(new Runnable() {
 //                @Override
@@ -79,44 +82,44 @@ public class InputFileChooser {
 //        }
 
 
-        // Create a file chooser
-        JFileChooser jFileChooser = new JFileChooser();
-
-        // Optionally, set the file chooser to select only files with a specific extension
-        // need to figure out how to save last file path*********************
-
-///////////////////////////// For Test Mode
-        File testFile = new File("C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets");
-/////////////////////////////
-
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF Files", "pdf");
-        jFileChooser.setFileFilter(filter);
-        jFileChooser.setDialogTitle("Choose File to Convert");
-
-        ///////////////////////////// For Test Mode
-        jFileChooser.setCurrentDirectory(testFile);
-        ///////////////////////////////
-
-        // Show the file chooser dialog
-        int result = jFileChooser.showOpenDialog(null);
-
-        //Get file path from user
-        String selectedFilePath = null;
-        // Check if a file was selected
-        if (result == JFileChooser.APPROVE_OPTION) {
-
-            // Get the selected file
-            File file = jFileChooser.getSelectedFile();
-            selectedFilePath = file.getAbsolutePath();
-
-            System.out.println("\n" + "Selected input file: " + file.getAbsolutePath() + "\n");
-        } else {
-            System.out.println("No file selected.");
-        }
-
-        return selectedFilePath;
-
-    }
+//        // Create a file chooser
+//        JFileChooser jFileChooser = new JFileChooser();
+//
+//        // Optionally, set the file chooser to select only files with a specific extension
+//        // need to figure out how to save last file path*********************
+//
+/////////////////////////////// For Test Mode
+//        File testFile = new File("C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets");
+///////////////////////////////
+//
+//        FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF Files", "pdf");
+//        jFileChooser.setFileFilter(filter);
+//        jFileChooser.setDialogTitle("Choose File to Convert");
+//
+//        ///////////////////////////// For Test Mode
+//        jFileChooser.setCurrentDirectory(testFile);
+//        ///////////////////////////////
+//
+//        // Show the file chooser dialog
+//        int result = jFileChooser.showOpenDialog(null);
+//
+//        //Get file path from user
+//        String selectedFilePath = null;
+//        // Check if a file was selected
+//        if (result == JFileChooser.APPROVE_OPTION) {
+//
+//            // Get the selected file
+//            File file = jFileChooser.getSelectedFile();
+//            selectedFilePath = file.getAbsolutePath();
+//
+//            System.out.println("\n" + "Selected input file: " + file.getAbsolutePath() + "\n");
+//        } else {
+//            System.out.println("No file selected.");
+//        }
+//
+//        return selectedFilePath;
+//        return selectedFilePath;
+//    }
 
 
 

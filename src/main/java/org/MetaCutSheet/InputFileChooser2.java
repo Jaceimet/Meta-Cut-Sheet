@@ -21,4 +21,30 @@ public class InputFileChooser2 {
 
         return null;
     }
+
+//    //successful launch, needs to return result
+//        try {
+//        Platform.startup(() ->
+//                {
+//                    FileChooser fileChooser = new FileChooser();
+//                    fileChooser.setTitle("Open Resource File");
+//                    fileChooser.getExtensionFilters().
+//
+//                            addAll(
+//                                    new FileChooser.ExtensionFilter("PDF", "*.pdf"),
+//                                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
+//                                    new FileChooser.ExtensionFilter("All Files", "*.*"));
+//                    File file = fileChooser.showOpenDialog(null);
+//
+//                    final String selectedFilePath = file.getAbsolutePath();
+//
+//                    return;
+//
+//                }
+//
+//        );
+//    } catch (Exception e) {
+//        throw new RuntimeException(e);
+//    }
+//}
 }
