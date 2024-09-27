@@ -9,7 +9,7 @@ import java.io.IOException;
 * () prioritize auto filling the form fields
 * () needs preferences / save last save location
 * () needs to handle multiple pdfs batch-mode/loop
-* () file search window to be closer to the windows explorer window style
+* (x) file search window to be closer to the windows explorer window style
 * (x) needs to handle images
 * (x) needs to handle multiple images for one pdf
 * (x) needs to handle mixed orientation (maybe)
@@ -39,28 +39,13 @@ public class Main {
         } else {
 
             userImageFile = InputFileChooser.multipleImageFileUserInput();
-            System.out.println(userImageFile);
+            System.out.println("user image file: " + userImageFile);
             final_cs = PdfImageCreator.pdfGenerator(template, userImageFile);
         }
 
-//        // needs a switch to choose pdf or image/images
-//        String inputUserFile = InputFileChooser.userFile();
-//
-//        File[] userFile = InputFileChooser.multipleFileUserInput();
-
-//        for (int i = userFile.length -1; i >= 0; i--) {
-//            System.out.println(userFile[i]);
-//                    }
-//        System.exit(0);
-
-        /* Code is funtional but lacks complexity needed
-         * https://stackoverflow.com/questions/23326562/convert-pdf-files-to-images-with-pdfbox
-         * */
-
-        // needs switch? to choose parameter sent?
-//        PDDocument final_cs = PdfImageCreator.pdfGenerator(template, inputUserFile, userFile);
-
         String selectedSaveFilePath = SaveFinalPDF.saveFinalPDF(final_cs);
+
+        //Need loop for batch files
 
         final_cs.close();
 

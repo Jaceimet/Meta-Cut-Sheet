@@ -13,7 +13,8 @@ public class InputFileChooser {
 
     static String userPDFFileInput() {
 
-//         repository added possible solution to customer request. has issue with opening file 3 deep
+//         https://github.com/steos/jnafilechooser/tree/master
+
         String selectedFilePath = null;
 
         JnaFileChooser jnaFileChooser = new JnaFileChooser();
@@ -47,6 +48,12 @@ public class InputFileChooser {
         jnaFileChooser.setCurrentDirectory(testFile2);
 
         if (jnaFileChooser.showOpenDialog(null)) {
+
+            ///////
+//            Need to save previous open location
+//            https://www.youtube.com/watch?v=Uxe7ZkX_Msw
+            /////
+
             File file = jnaFileChooser.getSelectedFile();
             selectedFilePath = file.getAbsolutePath();
 
