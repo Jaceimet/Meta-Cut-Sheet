@@ -1,6 +1,6 @@
 package org.MetaCutSheet;
 
-import javafx.stage.FileChooser;
+import jnafilechooser.api.JnaFileChooser;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -15,24 +15,24 @@ public class InputFileChooser {
 
     static String userPDFFileInput() {
 
-        /// failure due to multi-thread attept or can not return result in lambda form...
-
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        fileChooser.getExtensionFilters().
-
-                addAll(
-                        new FileChooser.ExtensionFilter("PDF", "*.pdf"),
-                        new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
-                        new FileChooser.ExtensionFilter("All Files", "*.*"));
-        File file = fileChooser.showOpenDialog(null);
-
-        final String selectedFilePath = file.getAbsolutePath();
-
-        return selectedFilePath;
-
-
-    }
+//        /// failure due to multi-thread attept or can not return result in lambda form...
+//
+//        FileChooser fileChooser = new FileChooser();
+//        fileChooser.setTitle("Open Resource File");
+//        fileChooser.getExtensionFilters().
+//
+//                addAll(
+//                        new FileChooser.ExtensionFilter("PDF", "*.pdf"),
+//                        new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
+//                        new FileChooser.ExtensionFilter("All Files", "*.*"));
+//        File file = fileChooser.showOpenDialog(null);
+//
+//        final String selectedFilePath = file.getAbsolutePath();
+//
+//        return selectedFilePath;
+//
+//
+//    }
 
 
 
@@ -59,19 +59,30 @@ public class InputFileChooser {
 //            throw new RuntimeException(e);
 //        }
 
-        // repository added possible solution to customer request. has issue with opening file 3 deep
-//        JnaFileChooser fc = new JnaFileChooser();
-//        fc.addFilter("PDF Files", "pdf");
-//        String testFile2 = "C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets";
-//        fc.setCurrentDirectory(testFile2);
-//
-//        if (fc.showOpenDialog(null)) {
-//            File f = fc.getSelectedFile();
-//            // do something with f
-//        }
+//         repository added possible solution to customer request. has issue with opening file 3 deep
+        String selectedFilePath = null;
+
+        JnaFileChooser jnaFileChooser = new JnaFileChooser();
+        jnaFileChooser.addFilter("PDF Files", "pdf");
+        jnaFileChooser.setTitle("Choose File to Convert");
+        String testFile2 = "C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets";
+        jnaFileChooser.setCurrentDirectory(testFile2);
+
+        if (jnaFileChooser.showOpenDialog(null)) {
+            File file = jnaFileChooser.getSelectedFile();
+            selectedFilePath = file.getAbsolutePath();
+
+            System.out.println("\n" + "Selected input file: " + selectedFilePath + "\n");
+        } else {
+            System.out.println("No file selected.");
+        }
+
+        return selectedFilePath;
+
+        }
 
 
-        // using jchooser/swing styling
+////         using jchooser/swing styling
 //        try {
 //            for (UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 //                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -80,8 +91,8 @@ public class InputFileChooser {
 //        } catch (Exception e) {
 //            throw new RuntimeException(e);
 //        }
-
-
+//
+//
 //        // Create a file chooser
 //        JFileChooser jFileChooser = new JFileChooser();
 //
@@ -117,7 +128,6 @@ public class InputFileChooser {
 //            System.out.println("No file selected.");
 //        }
 //
-//        return selectedFilePath;
 //        return selectedFilePath;
 //    }
 
