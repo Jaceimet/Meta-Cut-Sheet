@@ -5,18 +5,28 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.prefs.Preferences;
 
 public class SaveFinalPDF {
 
     public static String saveFinalPDF(PDDocument final_cs) throws IOException {
 
-
         String selectedSaveFilePath = null;
+
+        Preferences prefs = Preferences.userRoot().node("Save File Path");
+
+        String testFile2;
 
         JnaFileChooser jnaFileChooser = new JnaFileChooser();
         jnaFileChooser.setTitle("Choose Save Directory");
         jnaFileChooser.addFilter("PDF Documents (*.pdf)", "pdf");
-        String testFile2 = "C:\\\\Users\\\\James\\\\Desktop\\\\temp";
+        if (prefs.get("Save File Path", "root") == null){
+            testFile2 = "C:\\\\Users\\\\James\\\\Desktop";
+        } else {
+            testFile2 = prefs.get("Save File Path", "root");
+        }
+//        String testFile2 = prefs.get("Save File Path", "root");
+//        String testFile2 = "C:\\\\Users\\\\James\\\\Desktop\\\\temp";
         jnaFileChooser.setCurrentDirectory(testFile2);
 
         if (jnaFileChooser.showSaveDialog(null)) {
@@ -41,6 +51,12 @@ public class SaveFinalPDF {
         }
 
         final_cs.save(selectedSaveFilePath);
+
+//        Preferences prefs = Preferences.userRoot().node(selectedSaveFilePath);
+
+        prefs.put("Save File Path", selectedSaveFilePath );
+
+        System.out.println(prefs.get("Save File Path", "root"));
 
         System.out.println("Successfully saved to : " + selectedSaveFilePath + "\n");
 
