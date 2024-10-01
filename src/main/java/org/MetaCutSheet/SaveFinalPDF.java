@@ -52,8 +52,6 @@ public class SaveFinalPDF {
 
         final_cs.save(selectedSaveFilePath);
 
-//        Preferences prefs = Preferences.userRoot().node(selectedSaveFilePath);
-
         prefs.put("Save File Path", selectedSaveFilePath );
 
         System.out.println(prefs.get("Save File Path", "root"));

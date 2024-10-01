@@ -4,6 +4,7 @@ import jnafilechooser.api.JnaFileChooser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.prefs.Preferences;
 
 public class InputFileChooser {
 
@@ -15,12 +16,21 @@ public class InputFileChooser {
 
 //         https://github.com/steos/jnafilechooser/tree/master
 
+        Preferences prefs = Preferences.userRoot().node("User File Path");
+
         String selectedFilePath = null;
+
+        String testFile2;
 
         JnaFileChooser jnaFileChooser = new JnaFileChooser();
         jnaFileChooser.addFilter("PDF Files", "pdf");
         jnaFileChooser.setTitle("Choose PDF File to Convert");
-        String testFile2 = "C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets";
+        if (prefs.get("User File Path", "root") == null){
+            testFile2 = "C:\\\\Users\\\\James\\\\Desktop";
+        } else {
+            testFile2 = prefs.get("User File Path", "root");
+        }
+//        String testFile2 = "C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets";
         jnaFileChooser.setCurrentDirectory(testFile2);
 
         if (jnaFileChooser.showOpenDialog(null)) {
@@ -32,19 +42,30 @@ public class InputFileChooser {
             System.out.println("No file selected.");
         }
 
+        prefs.put("User File Path", selectedFilePath );
+
         return selectedFilePath;
     }
 
     public static File[] multipleImageFileUserInput() throws IOException {
 
+        Preferences prefs = Preferences.userRoot().node("User File Path");
 
-        String selectedFilePath;
+        String selectedFilePath = null;
+
+        String testFile2;
 
         JnaFileChooser jnaFileChooser = new JnaFileChooser();
         jnaFileChooser.addFilter("Image Files", "jpg", "png");
         jnaFileChooser.setTitle("Choose Image File(s) to Convert");
         jnaFileChooser.setMultiSelectionEnabled(true);
-        String testFile2 = "C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets";
+        if (prefs.get("User File Path", "root") == null){
+            testFile2 = "C:\\\\Users\\\\James\\\\Desktop";
+        } else {
+            testFile2 = prefs.get("User File Path", "root");
+        }
+
+//        String testFile2 = "C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets";
         jnaFileChooser.setCurrentDirectory(testFile2);
 
         if (jnaFileChooser.showOpenDialog(null)) {
@@ -62,35 +83,10 @@ public class InputFileChooser {
             System.out.println("No file selected.");
         }
 
+        prefs.put("User File Path", selectedFilePath );
+
         return jnaFileChooser.getSelectedFiles();
 
-
-
-//        try {
-//            for (UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-//            }
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        // need to add muti-file option for images
-//
-//        JFrame frame = new JFrame();
-//        JFileChooser chooser = new JFileChooser();
-//        chooser.setDialogTitle("Choose file(s) to Convert");
-//
-//        File testFile = new File("C:\\Computer Programming Projects\\Olivers PDF project\\sample cut sheets");
-//        chooser.setCurrentDirectory(testFile);
-//        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "png");
-//        chooser.setFileFilter(filter);
-//        chooser.setMultiSelectionEnabled(true);
-//        chooser.showOpenDialog(frame);
-//
-//
-//        //////////////////////
-//        return chooser.getSelectedFiles();
     }
 
 

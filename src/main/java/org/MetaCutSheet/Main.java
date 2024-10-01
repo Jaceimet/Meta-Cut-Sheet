@@ -7,8 +7,8 @@ import java.io.IOException;
 
 /* Notes: code needs to be cleaned
 * () prioritize auto filling the form fields
-* () needs preferences / save last save location
 * () needs to handle multiple pdfs batch-mode/loop
+* (x) needs preferences / save last save location
 * (x) file search window to be closer to the windows explorer window style
 * (x) needs to handle images
 * (x) needs to handle multiple images for one pdf
@@ -25,31 +25,39 @@ public class Main {
         File[] userImageFile;
         PDDocument final_cs;
 
+        do {
 
-        String template = FormSelector.displayForm();
+            // Select cutsheet
+            String template = FormSelector.displayForm();
 
-        String userSelection = PDFOrImagesSelector.displayPDFOrImageForm();
+            // Select PDF or Image
+            String userSelection = PDFOrImagesSelector.displayPDFOrImageForm();
 
-        // PDF or images processing
-        if (userSelection == "PDF") {
+            // PDF or images processing
+            if (userSelection == "PDF") {
 
-            userPDFFile = InputFileChooser.userPDFFileInput();
-            final_cs = PdfImageCreator.pdfGenerator(template, userPDFFile);
+                userPDFFile = InputFileChooser.userPDFFileInput();
+                final_cs = PdfImageCreator.pdfGenerator(template, userPDFFile);
 
-        } else {
+            } else {
 
-            userImageFile = InputFileChooser.multipleImageFileUserInput();
-            System.out.println("user image file: " + userImageFile);
-            final_cs = PdfImageCreator.pdfGenerator(template, userImageFile);
-        }
+                userImageFile = InputFileChooser.multipleImageFileUserInput();
+                System.out.println("user image file: " + userImageFile);
+                final_cs = PdfImageCreator.pdfGenerator(template, userImageFile);
+            }
 
-        String selectedSaveFilePath = SaveFinalPDF.saveFinalPDF(final_cs);
+            // Select save path
+            String selectedSaveFilePath = SaveFinalPDF.saveFinalPDF(final_cs);
 
-        //Need loop for batch files
+            //Need loop for batch files
 
-        final_cs.close();
+            final_cs.close();
 
-        OpenFinalPDF.openPDF(selectedSaveFilePath);
+            OpenFinalPDF.openPDF(selectedSaveFilePath);
+
+        }while (BatchModeLoop.displayForm() == 0);
+
+
 
         System.exit(0);
 
