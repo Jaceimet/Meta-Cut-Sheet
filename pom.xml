@@ -13,8 +13,6 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <javafx.version>19</javafx.version>
-        <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
     </properties>
 
 
@@ -24,22 +22,17 @@
             <artifactId>pdfbox</artifactId>
             <version>3.0.3</version> <!-- Adjust version based on latest release -->
         </dependency>
-        <dependency>
-            <groupId>com.jgoodies</groupId>
-            <artifactId>jgoodies-forms</artifactId>
-            <version>1.9.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.jgoodies</groupId>-->
+<!--            <artifactId>jgoodies-forms</artifactId>-->
+<!--            <version>1.9.0</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.github.steos</groupId>
             <artifactId>jnafilechooser</artifactId>
             <version>1.1.2</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
 
     </dependencies>
     <repositories>
@@ -48,20 +41,6 @@
             <url>https://jitpack.io</url>
         </repository>
     </repositories>
-
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>${javafx.maven.plugin.version}</version>
-                <configuration>
-                    <mainClass>org.example.Javafx</mainClass>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 
 </project>

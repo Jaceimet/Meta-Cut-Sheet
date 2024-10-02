@@ -2,17 +2,27 @@ package org.MetaCutSheet;
 
 import jnafilechooser.api.JnaFileChooser;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 
 public class InputFileChooser {
 
+
+
 //    Customer requests easier access to onedrive, need to save file preference for future use?
 //    https://www.youtube.com/watch?v=6y5vzp2qYik  (posible solution with mods)
 //    https://www.youtube.com/watch?v=1GeVbi1uj_8
 
     static String userPDFFileInput() {
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch(Exception e){
+
+        }
 
 //         https://github.com/steos/jnafilechooser/tree/master
 

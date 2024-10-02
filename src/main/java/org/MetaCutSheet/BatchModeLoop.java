@@ -9,13 +9,8 @@ public class BatchModeLoop {
 
     public static int displayForm() {
         reply = JOptionPane.showConfirmDialog(null,
-                "Would you like to process more documents?", "title", JOptionPane.YES_NO_OPTION);
-//        if (reply == JOptionPane.YES_OPTION) {
-//            JOptionPane.showMessageDialog(null, "HELLO");
-//        } else {
-//            JOptionPane.showMessageDialog(null, "GOODBYE");
-//            System.exit(0);
-//        }
+                "Would you like to process more documents?", "Batch Loop", JOptionPane.YES_NO_OPTION);
+
         System.out.println(reply);
 
         return reply;

@@ -13,7 +13,7 @@ public class ErrorMessages {
         // Display an error message dialog
         JOptionPane.showMessageDialog(
                 frame,
-                "A template error occurred and the project will be shutting down.",
+                "A template error occurred and the program will be shutting down.",
                 "Error",
                 JOptionPane.ERROR_MESSAGE
         );

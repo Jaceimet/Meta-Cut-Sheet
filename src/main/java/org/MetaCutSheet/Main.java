@@ -7,7 +7,8 @@ import java.io.IOException;
 
 /* Notes: code needs to be cleaned
 * () prioritize auto filling the form fields
-* () needs to handle multiple pdfs batch-mode/loop
+* () needs to utilize form
+* (x) needs to handle multiple pdfs batch-mode/loop
 * (x) needs preferences / save last save location
 * (x) file search window to be closer to the windows explorer window style
 * (x) needs to handle images
