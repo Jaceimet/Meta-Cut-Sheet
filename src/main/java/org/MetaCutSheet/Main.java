@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 /* Notes: code needs to be cleaned
-* () prioritize auto filling the form fields
+* () prioritize auto filling the form fields with excel sheet?
 * () needs to utilize form
 * (x) needs to handle multiple pdfs batch-mode/loop
 * (x) needs preferences / save last save location
