@@ -13,6 +13,7 @@ import java.io.IOException;
 * (x) file search window to be closer to the windows explorer window style
 * (x) needs to handle images
 * (x) needs to handle multiple images for one pdf
+*
 * (x) needs to handle mixed orientation (maybe)
 * Nests a Cut Sheet PDF or image of a Cut Sheet PDF onto a project summary form.
 * .exe instructions: https://www.youtube.com/watch?v=jKlyHG-zbjk, https://www.youtube.com/watch?v=N4MfDEGOEy4
