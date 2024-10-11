@@ -1,11 +1,12 @@
 package org.MetaCutSheet;
 
 import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.pdmodel.*;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
 import java.awt.image.BufferedImage;
@@ -14,9 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 
 public class PdfImageCreator {
@@ -68,22 +66,26 @@ public class PdfImageCreator {
 
 
 
-            //(beta)Enter hard code data into Manufacturer: field
+            //(beta)Enter hard code data into Manufacturer: field (successful)
+            // need to pull data from excel sheet
 /////////////////////////////////////
 
 
-            Map<String, String> fields = new HashMap();
-            fields.put("manufacturer", "Sony");
-            PDDocumentCatalog docCatalog = existingDocument.getDocumentCatalog();
-            PDAcroForm acroForm = docCatalog.getAcroForm();
-            acroForm.setCacheFields(true);
+//            Map<String, String> fields = new HashMap();
+//            fields.put("manufacturer", "Sony");
+//            PDDocumentCatalog docCatalog = existingDocument.getDocumentCatalog();
+//            PDAcroForm acroForm = docCatalog.getAcroForm();
+//            acroForm.setCacheFields(true);
+//
+//            Iterator var9 = fields.entrySet().iterator();
+//
+//            while(var9.hasNext()) {
+//                Map.Entry<String, String> field = (Map.Entry)var9.next();
+//                acroForm.getField((String)field.getKey()).setValue((String)field.getValue());
+//            }
 
-            Iterator var9 = fields.entrySet().iterator();
-
-            while(var9.hasNext()) {
-                Map.Entry<String, String> field = (Map.Entry)var9.next();
-                acroForm.getField((String)field.getKey()).setValue((String)field.getValue());
-            }
+            // Batch fill form
+            existingDocument = BatchForm.batchForm(existingDocument);
 
 
 ///////////////////////////////////////
