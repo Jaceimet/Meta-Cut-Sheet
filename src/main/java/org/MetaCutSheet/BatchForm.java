@@ -9,8 +9,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -39,29 +40,39 @@ public class BatchForm {
             int rows = sheet.getLastRowNum();
             int columns = sheet.getRow(1).getLastCellNum();
 
-            for(int r =0; r<=rows;r++){
+            for(int r = 0; r <= rows; r++){
 
                 XSSFRow row = sheet.getRow(r);
 
                 // error row is null?
-                for(int c = 0; c < columns; c++)
-                {
+                for(int c = 0; c < columns; c++) {
+
+                    //fails here need fix
                     XSSFCell cell = row.getCell(c);
 
-                    switch(cell.getCellType())
-                    {
-                        case STRING: System.out.println(cell.getStringCellValue()); break;
-                        case NUMERIC: System.out.println(cell.getNumericCellValue());break;
-                        case BOOLEAN: System.out.println(cell.getBooleanCellValue()); break;
-                    }
 
-                }
-                System.out.println();
+                        switch (cell.getCellType()) {
+                            case STRING:
+                                System.out.println(cell.getStringCellValue());
+                                break;
+                            case NUMERIC:
+                                System.out.println(cell.getNumericCellValue());
+                                break;
+                            case BOOLEAN:
+                                System.out.println(cell.getBooleanCellValue());
+                                break;
+                            case _NONE, ERROR, BLANK:
+                                break;
+                            default:
+                                throw new IllegalStateException("Unexpected value: " + cell.getCellType());
+                        }
+
+                    }
+                    System.out.println();
+
             }
 
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -76,14 +87,14 @@ public class BatchForm {
         fields.put("partNumber", "d");
         fields.put("description", "e");
         // incorrect format?
-//        fields.put("wattage", ("f").formatted());
+        fields.put("wattage", ("f").formatted());
         fields.put("voltage", "g");
         fields.put("control", "h");
         fields.put("dimmable", "i");
         // // incorrect format?
-////        LocalDate today = LocalDate.now();
-////        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-//        fields.put("date", ("123").formatted());
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        fields.put("date", dtf.format(today).toString()); //("123").formatted()
         fields.put("revision", "k");
         fields.put("approvedBy", "l");
         fields.put("ld", "m");
