@@ -31,27 +31,25 @@ public class BatchForm {
         try {
 
             System.out.println(excelFilePath);
+
             FileInputStream inputStream = new FileInputStream(excelFilePath);
 
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
 
             XSSFSheet sheet = workbook.getSheetAt(0); //XSSFSheet sheet = workbook.getSheet("sheet1")
 
-            int rows = sheet.getLastRowNum();
-            int columns = sheet.getRow(1).getLastCellNum();
+            int rowCount = sheet.getLastRowNum();
+            System.out.println("row count : " + rowCount);
 
-            for(int r = 0; r <= rows; r++){
+            for (int i =0; 1 < rowCount; i++){
+                XSSFRow row = sheet.getRow(i);
 
-                XSSFRow row = sheet.getRow(r);
-
-                // error row is null?
-                for(int c = 0; c < columns; c++) {
-
-                    //fails here need fix
-                    XSSFCell cell = row.getCell(c);
-
-
-                        switch (cell.getCellType()) {
+                //fails here, need if statement?
+                int cellCount = row.getPhysicalNumberOfCells();
+                for (int j = 0; j < cellCount; j++){
+                    XSSFCell cell = row.getCell(j);
+//                    String cellValue = getCellValue(cell);
+                    switch (cell.getCellType()) {
                             case STRING:
                                 System.out.println(cell.getStringCellValue());
                                 break;
@@ -62,6 +60,7 @@ public class BatchForm {
                                 System.out.println(cell.getBooleanCellValue());
                                 break;
                             case _NONE, ERROR, BLANK:
+                                System.out.println("blank cell possible error");
                                 break;
                             default:
                                 throw new IllegalStateException("Unexpected value: " + cell.getCellType());
@@ -73,9 +72,51 @@ public class BatchForm {
             }
 
 
+
+
+//            int rows = sheet.getLastRowNum();
+//            System.out.println("Number of rows: " + rows);
+//            int columns = sheet.getRow(1).getLastCellNum();
+//            System.out.println("Number of Columns: " + columns);
+//            for(int r = 0; r <= rows; r++){
+//
+//                XSSFRow row = sheet.getRow(r);
+//
+//                // error row is null?
+//                for(int c = 0; c < columns; c++) {
+//
+//                    //fails here need fix
+//                    XSSFCell cell = row.getCell(c);
+//
+//
+//                        switch (cell.getCellType()) {
+//                            case STRING:
+//                                System.out.println(cell.getStringCellValue());
+//                                break;
+//                            case NUMERIC:
+//                                System.out.println(cell.getNumericCellValue());
+//                                break;
+//                            case BOOLEAN:
+//                                System.out.println(cell.getBooleanCellValue());
+//                                break;
+//                            case _NONE, ERROR, BLANK:
+//                                System.out.println("blank cell possible error");
+//                                break;
+//                            default:
+//                                throw new IllegalStateException("Unexpected value: " + cell.getCellType());
+//                        }
+//
+//                    }
+//                    System.out.println();
+//
+//            }
+
+
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Ran out of rows " + e.getMessage());
         }
+
+
 
 
         Map<String, String> fields = new HashMap<>();
@@ -120,7 +161,5 @@ public class BatchForm {
         System.out.println("Form filled");
         return existingDocument;
     }
-
-
 
 }
