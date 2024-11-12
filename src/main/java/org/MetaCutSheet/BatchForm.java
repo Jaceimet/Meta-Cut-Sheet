@@ -21,6 +21,8 @@ public class BatchForm {
     public static PDDocument batchForm(PDDocument existingDocument){
 
 //https://www.youtube.com/watch?v=ipjl49Hgsg8&list=PLUDwpEzHYYLsN1kpIjOyYW6j_GLgOyA07
+        //https://www.youtube.com/watch?v=JAyJSffgm7c
+
 
         String excelFilePath = "src/main/resources/Cut Sheet Express excel.xlsx";
 
@@ -28,28 +30,61 @@ public class BatchForm {
 //        existingDocument = Loader.loadPDF(PdfImageCreator.class.getResourceAsStream(excelFilePath).readAllBytes());
 
 
-        try {
+//        try {
+//
+//            System.out.println(excelFilePath);
+//
+//            FileInputStream inputStream = new FileInputStream(excelFilePath);
+//
+//            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+//
+//            XSSFSheet sheet = workbook.getSheetAt(0); //XSSFSheet sheet = workbook.getSheet("sheet1")
+//
+//            int rowCount = sheet.getLastRowNum();
+//            System.out.println("row count : " + rowCount);
 
-            System.out.println(excelFilePath);
 
-            FileInputStream inputStream = new FileInputStream(excelFilePath);
+//            for (int i =0; i <= rowCount; i++) {
+//                    int columnCount = sheet.getRow(i).getLastCellNum();
+//                System.out.println("Cell count: " + columnCount);
+//
+//                    for (int j = 0; j < columnCount; j++) {
+//                        System.out.println(sheet.getRow(i).getCell(j).toString());
+//                    }
+//                    System.out.println();
+//
+////                }else {
+////                    System.out.println("no more row to process");
+////                }
+//
+//
+//            }
 
-            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+            try {
 
-            XSSFSheet sheet = workbook.getSheetAt(0); //XSSFSheet sheet = workbook.getSheet("sheet1")
+                System.out.println(excelFilePath);
 
-            int rowCount = sheet.getLastRowNum();
-            System.out.println("row count : " + rowCount);
+                FileInputStream inputStream = new FileInputStream(excelFilePath);
 
-            for (int i =0; 1 < rowCount; i++){
-                XSSFRow row = sheet.getRow(i);
+                XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
 
-                //fails here, need if statement?
-                int cellCount = row.getPhysicalNumberOfCells();
-                for (int j = 0; j < cellCount; j++){
-                    XSSFCell cell = row.getCell(j);
+                XSSFSheet sheet = workbook.getSheetAt(0); //XSSFSheet sheet = workbook.getSheet("sheet1")
+
+                int rowCount = sheet.getLastRowNum()-sheet.getFirstRowNum();
+                System.out.println("row count : " + rowCount);
+
+                for (int i =0; i <= rowCount; i++) {
+                    XSSFRow row = sheet.getRow(i);
+
+                    //fails here, need if statement?
+//                if (row != null) {
+                    int columnCount = row.getPhysicalNumberOfCells();
+                    System.out.println("Cell count: " + columnCount);
+
+                    for (int j = 0; j < columnCount; j++) {
+                        XSSFCell cell = row.getCell(j);
 //                    String cellValue = getCellValue(cell);
-                    switch (cell.getCellType()) {
+                        switch (cell.getCellType()) {
                             case STRING:
                                 System.out.println(cell.getStringCellValue());
                                 break;
@@ -69,8 +104,12 @@ public class BatchForm {
                     }
                     System.out.println();
 
-            }
+//                }else {
+//                    System.out.println("no more row to process");
+//                }
 
+
+                }
 
 
 
