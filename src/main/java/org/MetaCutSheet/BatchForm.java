@@ -58,45 +58,65 @@ public class BatchForm {
 
                 XSSFSheet sheet = workbook.getSheetAt(0); //XSSFSheet sheet = workbook.getSheet("sheet1")
 
-                int rowCount = sheet.getLastRowNum()-sheet.getFirstRowNum();
+                int rowCount = sheet.getLastRowNum() - sheet.getFirstRowNum();
                 System.out.println("row count : " + rowCount);
 
-                for (int i =0; i <= rowCount; i++) {
+                for (int i = 0; i <= rowCount; i++) {
                     XSSFRow row = sheet.getRow(i);
 
                     //fails here, need if statement?
                     int columnCount = row.getPhysicalNumberOfCells();
                     System.out.println("Cell count: " + columnCount);
 
-                    for (int j = 0; j < columnCount; j++) {
-                        XSSFCell cell = row.getCell(j);
+//                    if (columnCount != 1) {
 
+                        for (int j = 0; j < columnCount; j++) {
+
+                            //needs better logic to skip blank cells
+                            if (row.getCell(j) != null && columnCount > 1){
+
+                            XSSFCell cell = row.getCell(j);
 
 
 //                    String cellValue = getCellValue(cell);
-                        switch (cell.getCellType()) {
-                            case STRING:
-                                System.out.println(cell.getStringCellValue());
-                                break;
-                            case NUMERIC:
-                                System.out.println(cell.getNumericCellValue());
-                                break;
-                            case BOOLEAN:
-                                System.out.println(cell.getBooleanCellValue());
-                                break;
-                            case _NONE, ERROR, BLANK:
-                                System.out.println("blank cell possible error");
-                                break;
-                            default:
-                                throw new IllegalStateException("Unexpected value: " + cell.getCellType());
-                        }
+                            switch (cell.getCellType()) {
+                                case STRING:
+                                    System.out.println(cell.getStringCellValue());
+                                    break;
+                                case NUMERIC:
+                                    System.out.println(cell.getNumericCellValue());
+                                    break;
+                                case BOOLEAN:
+                                    System.out.println(cell.getBooleanCellValue());
+                                    break;
+                                case FORMULA:
+                                    System.out.println(cell.getDateCellValue());
+                                    break;
+                                case _NONE:
+                                    System.out.println("none");
+                                    break;
+                                case ERROR:
+                                    System.out.println("Error");
+                                    break;
+                                case BLANK:
+                                    System.out.println("Blank");
+                                    break;
+                                default:
+                                    throw new IllegalStateException("Unexpected value: " + cell.getCellType());
+                            }
+                        }else {
+                                ++columnCount;
+                                ++j;
+//                                i=rowCount;
+                            }
 
                     }
                     System.out.println();
                 }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
+                } catch(IOException e){
+                    System.err.println(e.getMessage());
+                }
+
 
 
         Map<String, String> fields = new HashMap<>();
@@ -143,5 +163,5 @@ public class BatchForm {
     }
 
 
-    
+
 }
