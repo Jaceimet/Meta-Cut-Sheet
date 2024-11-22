@@ -3,7 +3,6 @@ package org.MetaCutSheet;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -43,6 +42,7 @@ public class BatchForm {
         //hashmap data processing
         //https://www.youtube.com/watch?v=rJ3-94VjWMg
 
+
         try {
             String excelFilePath = "src/main/resources/Cut Sheet Express excel.xlsx";
 
@@ -50,17 +50,17 @@ public class BatchForm {
 
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
 
-            XSSFSheet sheet = workbook.getSheetAt(0); //XSSFSheet sheet = workbook.getSheet("sheet1")
+            XSSFSheet sheet = workbook.getSheet("sheet1"); //XSSFSheet sheet = workbook.getSheet("sheet1")
 
             List<Map<String,String>> mapList = new ArrayList<>();
 
-            int rowCount = sheet.getLastRowNum();
+//            int rowCount = sheet.getLastRowNum();
+            int rowCount = sheet.getLastRowNum() - sheet.getFirstRowNum();
             System.out.println("row count : " + rowCount);
 
-            XSSFRow row = sheet.getRow(0);
 
             //example snipit
-            // for (int i = 0; i <= rowCount; i++) {
+//                for (int i = 0; i <= rowCount; i++) {
 //                    XSSFRow row = sheet.getRow(i);
 //
 //                    //fails here, need if statement?
@@ -76,19 +76,22 @@ public class BatchForm {
 //
 //                            XSSFCell cell = row.getCell(j);
 
+
             //Current inprogress code
             // note code reads top to bottom, needs left to right
-            for (int i = 0; i < rowCount + 1; i++){
+            for (int i = 0; i <= rowCount; i++){ //+1
 
-                Row r = CellUtil.getRow(i,sheet);
+                XSSFRow row = sheet.getRow(i);
+
+//                int columnCount = row.getPhysicalNumberOfCells();
 
                 Map<String,String> myMap = new HashMap<>();
 
                 for(int j =0; j< row.getPhysicalNumberOfCells(); j++){
 
-
-                    String key = CellUtil.getCell(r,0).toString();
-                    String value = CellUtil.getCell(r,j).toString();
+//                    Row r = CellUtil.getRow(i,sheet);
+                    String key = CellUtil.getCell(row,0).toString();
+                    String value = CellUtil.getCell(row,j).toString();
 
                     myMap.put(key,value);
 
@@ -129,7 +132,7 @@ public class BatchForm {
 //        System.err.println(e.getMessage());
 //    }
 
-
+//            // this code only prints out data, does not store
 //            try {
 //                String excelFilePath = "src/main/resources/Cut Sheet Express excel.xlsx";
 //
