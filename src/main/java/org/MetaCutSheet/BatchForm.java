@@ -3,6 +3,8 @@ package org.MetaCutSheet;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -52,54 +54,66 @@ public class BatchForm {
 
             XSSFSheet sheet = workbook.getSheet("sheet1"); //XSSFSheet sheet = workbook.getSheet("sheet1")
 
-            List<Map<String,String>> mapList = new ArrayList<>();
+
 
 //            int rowCount = sheet.getLastRowNum();
-            int rowCount = sheet.getLastRowNum() - sheet.getFirstRowNum();
-            System.out.println("row count : " + rowCount);
+//            int rowCount = sheet.getLastRowNum() ; //- sheet.getFirstRowNum()
+//            System.out.println("row count : " + rowCount);
 
 
-            //example snipit
-//                for (int i = 0; i <= rowCount; i++) {
-//                    XSSFRow row = sheet.getRow(i);
-//
-//                    //fails here, need if statement?
-//                    int columnCount = row.getPhysicalNumberOfCells();
-//                    System.out.println("Cell count: " + columnCount);
-//
-////                    if (columnCount != 1) {
-//
-//                        for (int j = 0; j < columnCount; j++) {
-//
-//                            //needs better logic to skip blank cells
-//                            if (row.getCell(j) != null && columnCount > 1){
-//
-//                            XSSFCell cell = row.getCell(j);
+// example code (current state reads correct direction but wrong value)
+
+            List<Map<String,String>> mapLists = new ArrayList<>();
+
+            int rows = sheet.getLastRowNum();
+            System.out.println("rows: " + rows);
+
+            XSSFRow row = sheet.getRow(0);
+            System.out.println("Last Cell num: " + row.getLastCellNum());
+
+            for(int j = 0; j < row.getLastCellNum(); j++){
+
+                Map<String, String > myMap = new HashMap<>();
+
+
+                for (int i = 1; i < rows + 1; i++){
+
+                    Row r = CellUtil.getRow(0, sheet);
+                    String key = CellUtil.getCell(r,0).toString();
+                    String value = CellUtil.getCell(r,j).toString();
+
+                    myMap.put(key,value);
+
+
+                }
+
+                mapLists.add(myMap);
+            }
 
 
             //Current inprogress code
             // note code reads top to bottom, needs left to right
-            for (int i = 0; i <= rowCount; i++){ //+1
-
-                XSSFRow row = sheet.getRow(i);
-
-//                int columnCount = row.getPhysicalNumberOfCells();
-
-                Map<String,String> myMap = new HashMap<>();
-
-                for(int j =0; j< row.getPhysicalNumberOfCells(); j++){
-
-//                    Row r = CellUtil.getRow(i,sheet);
-                    String key = CellUtil.getCell(row,0).toString();
-                    String value = CellUtil.getCell(row,j).toString();
-
-                    myMap.put(key,value);
-
-                }
-                mapList.add(myMap);
-            }
-
-            System.out.println(mapList);
+//            for (int i = 0; i <= rowCount; i++){ //+1
+//
+//                XSSFRow row = sheet.getRow(i);
+//
+////                int columnCount = row.getPhysicalNumberOfCells();
+//
+//                Map<String,String> myMap = new HashMap<>();
+//
+//                for(int j =0; j< row.getPhysicalNumberOfCells(); j++){
+//
+////                    Row r = CellUtil.getRow(i,sheet);
+//                    String key = CellUtil.getCell(row,0).toString();
+//                    String value = CellUtil.getCell(row,j).toString();
+//
+//                    myMap.put(key,value);
+//
+//                }
+//                mapList.add(myMap);
+//            }
+//
+            System.out.println(mapLists);
 
             inputStream.close();
 
