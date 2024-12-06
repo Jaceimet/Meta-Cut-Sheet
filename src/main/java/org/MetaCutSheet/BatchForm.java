@@ -37,6 +37,9 @@ public class BatchForm {
 
     public static PDDocument batchForm(PDDocument existingDocument){
 
+        //look into linked hashmap?
+        //Java collections overview: https://www.youtube.com/watch?v=viTHc_4XfCA
+
 //https://www.youtube.com/watch?v=ipjl49Hgsg8&list=PLUDwpEzHYYLsN1kpIjOyYW6j_GLgOyA07
         //https://www.youtube.com/watch?v=JAyJSffgm7c
 
@@ -54,14 +57,6 @@ public class BatchForm {
             XSSFSheet sheet = workbook.getSheet("sheet1"); //XSSFSheet sheet = workbook.getSheet("sheet1")
 
 
-
-//            int rowCount = sheet.getLastRowNum();
-//            int rowCount = sheet.getLastRowNum() ; //- sheet.getFirstRowNum()
-//            System.out.println("row count : " + rowCount);
-
-
-// example code (current state reads correct direction, correct value but makes each set a map)
-
             List<Map<String,String>> mapLists = new ArrayList<>();
 
             int rows = sheet.getLastRowNum();
@@ -73,18 +68,25 @@ public class BatchForm {
             // functional loop, each row is a map
             for(int i = 0; i < rows; i++){
 
-                Map<String, String > myMap = new HashMap<>();
+                //attempt to remove empty maps unsuccessful so far
+//                Row rowCheck = CellUtil.getRow(i+1, sheet);
+                Row rowCheck = CellUtil.getRow(i,sheet);
 
+//                if(rowCheck.iterator().hasNext()) {
+                    LinkedHashMap<String, String> myMap = new LinkedHashMap<>();
+//                }
 
                 for (int j = 0; j < row.getLastCellNum(); j++){
 
-//                    Row r = CellUtil.getRow(i,sheet);
-                    Row r = CellUtil.getRow(0,sheet);
-                    Row r2 = CellUtil.getRow(i+1, sheet);
-                    String key = CellUtil.getCell(r,j).toString();
-                    String value = CellUtil.getCell(r2,j).toString();
+                    Row keyRow = CellUtil.getRow(0,sheet);
+                    Row valueRow = CellUtil.getRow(i+1, sheet);
+                    String key = CellUtil.getCell(keyRow,j).toString();
+                    String value = CellUtil.getCell(valueRow,j).toString();
 
-                    myMap.put(key,value);
+                    if(value != "") {
+                        myMap.put(key, value);
+
+                    }
 
                 }
 
@@ -92,63 +94,16 @@ public class BatchForm {
 
             }
 
-
-
-            //original loop
-//            for(int j = 0; j < row.getLastCellNum(); j++){
-//
-//                Map<String, String > myMap = new HashMap<>();
-//
-//
-//
-//                for (int i = 0; i < rows + 1; i++){
-//
-//                    Row r = CellUtil.getRow(0, sheet);
-//                    Row v = CellUtil.getRow(1,sheet);
-//                    String key = CellUtil.getCell(r,j).toString();
-//                    String value = CellUtil.getCell(v,j).toString();
-//
-//                    myMap.put(key,value);
-//
-//
-//                }
-//
-//                mapLists.add(myMap);
-//            }
-
-
-            //Current inprogress code
-            // note code reads top to bottom, needs left to right
-//            for (int i = 0; i <= rowCount; i++){ //+1
-//
-//                XSSFRow row = sheet.getRow(i);
-//
-////                int columnCount = row.getPhysicalNumberOfCells();
-//
-//                Map<String,String> myMap = new HashMap<>();
-//
-//                for(int j =0; j< row.getPhysicalNumberOfCells(); j++){
-//
-////                    Row r = CellUtil.getRow(i,sheet);
-//                    String key = CellUtil.getCell(row,0).toString();
-//                    String value = CellUtil.getCell(row,j).toString();
-//
-//                    myMap.put(key,value);
-//
-//                }
-//                mapList.add(myMap);
-//            }
-//
 //            System.out.println(mapLists);
 
-            System.out.println(mapLists);
+            for (Map<String, String> map : mapLists){
+//                map.get("Target PDF/Image Location");
+//                System.out.println(map.get("Target PDF/Image Location:"));
+//                if (map. {
+                    System.out.println(map);
+//                }
 
-//            for (Map<String, String> map : mapLists){
-////                map.get("Target PDF/Image Location");
-//                System.out.println(map.get());
-////                System.out.println(map.get("Target PDF/Image Location:"));
-//
-//            }
+            }
 
 
             inputStream.close();
@@ -157,30 +112,7 @@ public class BatchForm {
             System.err.println(e.getMessage());
         }
 
-//         original version
-//        for (int i = 1; i < rowCount +1; i++){
-//
-//            Map<String,String> myMap = new HashMap<>();
-//
-//            for(int j =1; j< row.getLastCellNum(); j++){
-//
-//                Row r = CellUtil.getRow(i,sheet);
-//                String key = CellUtil.getCell(r,0).toString();
-//                String value = CellUtil.getCell(r,j).toString();
-//
-//                myMap.put(key,value);
-//
-//            }
-//            mapList.add(myMap);
-//        }
-//
-//        System.out.println(mapList);
-//
-//        inputStream.close();
-//
-//    } catch (IOException e) {
-//        System.err.println(e.getMessage());
-//    }
+
 
 //            // this code only prints out data, does not store
 //            try {
