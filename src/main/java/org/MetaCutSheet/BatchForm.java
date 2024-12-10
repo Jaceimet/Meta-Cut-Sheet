@@ -17,23 +17,23 @@ import java.util.*;
 
 public class BatchForm {
 
-    static String type;
-    static String manufacturer;
-    static String modelNumber;
-    static String partNumber;
-    static String description;
-    static String wattage;
-    static String voltage;
-    static String control;
-    static String dimmable;
-    static String date;
-    static String revision;
-    static String approvedBy;
-    static String ld;
-    static String designFirm;
-    static String projectName;
-    static String projectLocation;
-    static String notes;
+//    static String type;
+//    static String manufacturer;
+//    static String modelNumber;
+//    static String partNumber;
+//    static String description;
+//    static String wattage;
+//    static String voltage;
+//    static String control;
+//    static String dimmable;
+//    static String date;
+//    static String revision;
+//    static String approvedBy;
+//    static String ld;
+//    static String designFirm;
+//    static String projectName;
+//    static String projectLocation;
+//    static String notes;
 
     public static PDDocument batchForm(PDDocument existingDocument){
 
@@ -99,9 +99,50 @@ public class BatchForm {
             for (Map<String, String> map : mapLists){
 //                map.get("Target PDF/Image Location");
 //                System.out.println(map.get("Target PDF/Image Location:"));
-//                if (map. {
+                if (map.containsValue("C:\\Users\\James\\Desktop\\001")){
                     System.out.println(map);
-//                }
+
+                    Map<String, String> fields = new HashMap<>();
+
+                    fields.put("type", map.get("Type:"));
+                    fields.put("manufacturer", map.get("Manufacturer:"));
+                    // incorrect format?
+                    fields.put("modelNumber", map.get("Model #:"));
+                    fields.put("partNumber", map.get("Part #:"));
+                    fields.put("description", map.get("Description:"));
+                    // incorrect format?
+                    fields.put("wattage", map.get("Wattage:"));
+                    fields.put("voltage", map.get("Voltage:"));
+                    fields.put("control", map.get("Control:"));
+                    fields.put("dimmable", map.get("Dimmable:"));
+                    // // incorrect format?
+                    LocalDate today = LocalDate.now();
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+                    fields.put("date", dtf.format(today)); //("123").formatted()
+                    fields.put("revision", map.get("Revision:"));
+                    fields.put("approvedBy", map.get("Approved By:"));
+                    fields.put("ld", map.get("LD:"));
+                    fields.put("designFirm", map.get("Design Firm:"));
+                    fields.put("projectName", map.get("Project Name:"));
+                    fields.put("projectLocation", map.get("Project Location:"));
+                    fields.put("notes", map.get("Notes:"));
+                    PDDocumentCatalog docCatalog = existingDocument.getDocumentCatalog();
+                    PDAcroForm acroForm = docCatalog.getAcroForm();
+                    acroForm.setCacheFields(true);
+
+                    Iterator var9 = fields.entrySet().iterator();
+
+                    while(var9.hasNext()) {
+                        Map.Entry<String, String> field = (Map.Entry)var9.next();
+                        try {
+                            acroForm.getField(field.getKey()).setValue(field.getValue());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+
+                }
 
             }
 
@@ -187,44 +228,44 @@ public class BatchForm {
 
 
 
-        Map<String, String> fields = new HashMap<>();
-
-        fields.put("type", type);
-        fields.put("manufacturer", manufacturer);
-        // incorrect format?
-        fields.put("modelNumber", modelNumber);
-        fields.put("partNumber", partNumber);
-        fields.put("description", description);
-        // incorrect format?
-        fields.put("wattage", wattage);
-        fields.put("voltage", voltage);
-        fields.put("control", control);
-        fields.put("dimmable", dimmable);
-        // // incorrect format?
-        LocalDate today = LocalDate.now();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        fields.put("date", dtf.format(today)); //("123").formatted()
-        fields.put("revision", revision);
-        fields.put("approvedBy", approvedBy);
-        fields.put("ld", ld);
-        fields.put("designFirm", designFirm);
-        fields.put("projectName", projectName);
-        fields.put("projectLocation", projectLocation);
-        fields.put("notes", notes);
-        PDDocumentCatalog docCatalog = existingDocument.getDocumentCatalog();
-        PDAcroForm acroForm = docCatalog.getAcroForm();
-        acroForm.setCacheFields(true);
-
-        Iterator var9 = fields.entrySet().iterator();
-
-        while(var9.hasNext()) {
-            Map.Entry<String, String> field = (Map.Entry)var9.next();
-            try {
-                acroForm.getField(field.getKey()).setValue(field.getValue());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+//        Map<String, String> fields = new HashMap<>();
+//
+//        fields.put("type", type);
+//        fields.put("manufacturer", manufacturer);
+//        // incorrect format?
+//        fields.put("modelNumber", modelNumber);
+//        fields.put("partNumber", partNumber);
+//        fields.put("description", description);
+//        // incorrect format?
+//        fields.put("wattage", wattage);
+//        fields.put("voltage", voltage);
+//        fields.put("control", control);
+//        fields.put("dimmable", dimmable);
+//        // // incorrect format?
+//        LocalDate today = LocalDate.now();
+//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+//        fields.put("date", dtf.format(today)); //("123").formatted()
+//        fields.put("revision", revision);
+//        fields.put("approvedBy", approvedBy);
+//        fields.put("ld", ld);
+//        fields.put("designFirm", designFirm);
+//        fields.put("projectName", projectName);
+//        fields.put("projectLocation", projectLocation);
+//        fields.put("notes", notes);
+//        PDDocumentCatalog docCatalog = existingDocument.getDocumentCatalog();
+//        PDAcroForm acroForm = docCatalog.getAcroForm();
+//        acroForm.setCacheFields(true);
+//
+//        Iterator var9 = fields.entrySet().iterator();
+//
+//        while(var9.hasNext()) {
+//            Map.Entry<String, String> field = (Map.Entry)var9.next();
+//            try {
+//                acroForm.getField(field.getKey()).setValue(field.getValue());
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
 
         System.out.println("Form filled");
         return existingDocument;
