@@ -9,11 +9,14 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.awt.*;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.List;
 
 public class BatchForm {
 
@@ -49,6 +52,24 @@ public class BatchForm {
 
         try {
             String excelFilePath = "src/main/resources/Cut Sheet Express excel.xlsx";
+
+            //successfully open Excel spreadsheet
+            if (Desktop.isDesktopSupported()) {
+                try {
+                    File excelFile = new File(excelFilePath);
+                    if (excelFile.exists()) {
+                        Desktop.getDesktop().open(excelFile);
+                        System.out.println("Excel opened successfully." + "\n");
+                    } else {
+                        System.out.println("excel file does not exist." + "\n");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("Failed to open excel." + "\n");
+                }
+            } else {
+                System.out.println("Desktop is not supported. Cannot open excel." + "\n");
+            }
 
             FileInputStream inputStream = new FileInputStream(excelFilePath);
 
@@ -140,7 +161,6 @@ public class BatchForm {
                             throw new RuntimeException(e);
                         }
                     }
-
 
                 }
 
